@@ -1,0 +1,161 @@
+# Example Wikibase docker-compose setup
+version: '3.4'
+
+x-common-variables: &wikibase_variables
+  DB_SERVER: mysql.svc:3306
+  MW_ADMIN_NAME: ${MW_ADMIN_NAME}
+  MW_ADMIN_PASS: ${MW_ADMIN_PASS}
+  MW_ADMIN_EMAIL: ${MW_ADMIN_EMAIL}
+  MW_WG_SECRET_KEY: ${MW_SECRET_KEY}
+  # Disable jobs running after requests when wikibase_jobrunner is defined
+  MW_WG_JOB_RUN_RATE: 0
+  DB_USER: ${DB_USER}
+  DB_PASS: ${DB_PASS}
+  DB_NAME: ${DB_NAME}
+  WIKIBASE_HOST: ${WIKIBASE_HOST}
+
+services:
+  wikibase:
+#    image: "${WIKIBASE_BUNDLE_IMAGE_NAME}"
+    build:
+      context: ./wikibase
+      dockerfile: Dockerfile
+    container_name: movies_wikibase
+    links:
+      - mysql
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    ports:
+      - "${WIKIBASE_PORT}:80"
+    volumes:
+      ## This shares the configuration with jobrunner
+      - shared:/var/www/html/:rw
+      ## Uncomment this next line to mount your own LocalSettings.php file
+      ## also uncomment the same line in the wikibase_jobrunner service!
+      - ./wikibase/LocalSettings.php:/var/www/html/LocalSettings.d/LocalSettings.override.php
+      - ./wikibase/extra-install.sh:/extra-install.sh
+    networks:
+      default:
+        aliases:
+         - ${WIKIBASE_HOST}
+         - wikibase-docker.svc
+    environment:
+      <<: *wikibase_variables
+      WIKIBASE_PINGBACK:
+      MW_WG_ENABLE_UPLOADS:
+      QS_PUBLIC_SCHEME_HOST_AND_PORT:
+
+  wikibase_jobrunner:
+#    image: "${WIKIBASE_BUNDLE_IMAGE_NAME}"
+    build:
+      context: ./wikibase
+      dockerfile: Dockerfile
+    container_name: movies_wikibase_jobrunner
+    entrypoint: /bin/bash
+    command:  /jobrunner-entrypoint.sh
+    links:
+      - mysql
+    depends_on:
+      - mysql
+    restart: always
+    volumes:
+      - shared:/shared/:ro
+      - ./wikibase/jobrunner-entrypoint.sh:/jobrunner-entrypoint.sh
+      ## Uncomment this next line to mount your own LocalSettings.php file
+      ## also uncomment the same line in the wikibase service
+      - ./wikibase/LocalSettings.php:/var/www/html/LocalSettings.d/LocalSettings.override.php
+    networks:
+      default:
+        aliases:
+          - wikibase-jobrunner.svc
+    environment:
+      <<: *wikibase_variables
+      MAX_JOBS: ${MAX_JOBS}
+
+  mysql:
+    image: "${MYSQL_IMAGE_NAME}"
+    container_name: movies_mysql
+    restart: unless-stopped
+    volumes:
+      - mediawiki-mysql-data:/var/lib/mysql
+    environment:
+      # CONFIG - Change the default values below (should match values passed to wikibase)
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    networks:
+      default:
+        aliases:
+         - mysql.svc
+
+  wdqs-frontend:
+    image: "${WDQS_FRONTEND_IMAGE_NAME}"
+    container_name: movies_wdqs_frontend
+    restart: unless-stopped
+    ports:
+     - "${WDQS_FRONTEND_PORT}:80"
+    depends_on:
+      - wdqs-proxy
+    networks:
+      default:
+        aliases:
+         - ${WDQS_FRONTEND_HOST}
+    environment:
+      - WIKIBASE_HOST=${WIKIBASE_HOST}
+      - WDQS_HOST=wdqs-proxy.svc
+
+  wdqs:
+    image: "${WDQS_IMAGE_NAME}"
+    container_name: movies_wdqs
+    restart: unless-stopped
+    command: /runBlazegraph.sh
+    volumes:
+      - query-service-data:/wdqs/data
+    networks:
+      default:
+        aliases:
+         - wdqs.svc
+    environment:
+      - WIKIBASE_HOST=${WIKIBASE_HOST}
+      - WDQS_HOST=wdqs.svc
+      - WDQS_PORT=9999
+    expose:
+      - 9999
+
+  wdqs-proxy:
+    image: "${WDQS_PROXY_IMAGE_NAME}"
+    container_name: movies_wdqs_proxy
+    restart: unless-stopped
+    environment:
+      - PROXY_PASS_HOST=wdqs.svc:9999
+    depends_on:
+      - wdqs
+    networks:
+      default:
+        aliases:
+         - wdqs-proxy.svc
+
+  wdqs-updater:
+    image: "${WDQS_IMAGE_NAME}"
+    container_name: movies_wdqs_updater
+    restart: unless-stopped
+    command: /runUpdate.sh
+    depends_on:
+    - wdqs
+    - wikibase
+    networks:
+      default:
+        aliases:
+         - wdqs-updater.svc
+    environment:
+     - WIKIBASE_HOST=${WIKIBASE_HOST}
+     - WDQS_HOST=wdqs.svc
+     - WDQS_PORT=9999
+     # CONFIG - WIKIBASE_SCHEME can be set to 'https' if the updater should expect https concept uris
+
+volumes:
+  query-service-data:
+  shared:
+  mediawiki-mysql-data:
