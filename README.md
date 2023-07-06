@@ -4,7 +4,7 @@
 
 Movies-docker est un outil en charge de constituer une base de connaissance historique et centralisée sur les établissements de l'ESR et leurs activités en lien avec le doctorat et la documentation électronique.
 
-![movies](https://user-images.githubusercontent.com/328244/203315079-4cabb49a-58a8-4778-80b5-d789e48fb94d.PNG)
+![movies](https://abes-esr.atlassian.net/rest/api/2/universal_avatar/view/type/project/avatar/10611?size=xxlarge)
 
 Ce dépôt contient la configuration docker 🐳 pour déployer l'application movies en local sur le poste d'un développeur, ou bien sur les serveurs de test et prod. 
 
