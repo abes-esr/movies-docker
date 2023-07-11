@@ -58,7 +58,7 @@ services:
          - ${WIKIBASE_HOST}
          - wikibase-docker.svc
     environment:
-      VIRTUAL_HOST: movies.abes.fr
+      VIRTUAL_HOST: movies-test.abes.fr
       VIRTUAL_PORT: "${WIKIBASE_PORT}"
       <<: *wikibase_variables
       WIKIBASE_PINGBACK:
