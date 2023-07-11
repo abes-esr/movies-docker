@@ -15,6 +15,22 @@ x-common-variables: &wikibase_variables
   WIKIBASE_HOST: ${WIKIBASE_HOST}
 
 services:
+
+  proxy:
+    build: ./proxy
+    restart: always
+    ports:
+      - 12540:80
+    volumes:
+      - conf:/etc/nginx/conf.d
+      - certs:/etc/nginx/certs:ro
+      - vhost.d:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - dhparam:/etc/nginx/dhparam
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - default
+
   wikibase:
 #    image: "${WIKIBASE_BUNDLE_IMAGE_NAME}"
     build:
@@ -24,6 +40,7 @@ services:
     links:
       - mysql
     depends_on:
+      - proxy
       - mysql
     restart: unless-stopped
     ports:
@@ -41,6 +58,8 @@ services:
          - ${WIKIBASE_HOST}
          - wikibase-docker.svc
     environment:
+      VIRTUAL_HOST: movies.abes.fr
+      VIRTUAL_PORT: "${WIKIBASE_PORT}"
       <<: *wikibase_variables
       WIKIBASE_PINGBACK:
       MW_WG_ENABLE_UPLOADS:
@@ -159,3 +178,9 @@ volumes:
   query-service-data:
   shared:
   mediawiki-mysql-data:
+  conf:
+  certs:
+  vhost.d:
+  html:
+  dhparam:
+
