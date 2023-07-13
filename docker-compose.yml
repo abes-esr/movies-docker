@@ -120,8 +120,8 @@ services:
     environment:
       VIRTUAL_HOST: movies-test.abes.fr
       VIRTUAL_PATH: /sparql    
-      - WIKIBASE_HOST=${WIKIBASE_HOST}
-      - WDQS_HOST=wdqs-proxy.svc
+      WIKIBASE_HOST: ${WIKIBASE_HOST}
+      WDQS_HOST: wdqs-proxy.svc
 
   wdqs:
     image: "${WDQS_IMAGE_NAME}"
