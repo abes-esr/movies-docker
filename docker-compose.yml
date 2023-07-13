@@ -119,9 +119,8 @@ services:
          - ${WDQS_FRONTEND_HOST}
     environment:
       VIRTUAL_HOST: movies-test.abes.fr
-      # container must handle mutliple path
+      # container must handle mutliple path, is not compatible with VIRTUAL_DEST
       VIRTUAL_PATH: ~ /(sparql|proxy/wikibase)
-      VIRTUAL_DEST: /      
       WIKIBASE_HOST: ${WIKIBASE_HOST}
       WDQS_HOST: wdqs-proxy.svc
 
