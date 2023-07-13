@@ -2,7 +2,7 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/abesesr/movies.svg)](https://hub.docker.com/r/abesesr/movies/)
 
-Movies-docker est un outil en charge de constituer une base de connaissance historique et centralisée sur les établissements de l'ESR et leurs activités en lien avec le doctorat et la documentation électronique.
+Movies-docker est un outil en charge de constituer une base de connaissance historique et centralisée sur les établissements de l'ESR et leurs activités en lien avec le doctorat et la documentation électronique. __Cet outil est destiné à un usage interne de l'Abes.__
 
 ![image](https://github.com/abes-esr/movies-docker/assets/43854599/461fa996-48f4-4669-92bb-c9678d26e2dc)
 
