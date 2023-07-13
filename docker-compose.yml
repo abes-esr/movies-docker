@@ -58,7 +58,7 @@ services:
     environment:
       VIRTUAL_HOST: movies-test.abes.fr
       # container must handle mutliple path
-      VIRTUAL_PATH: ~ \/(proxy\/wikibase)?
+      VIRTUAL_PATH: ~ /(proxy/wikibase)?
       <<: *wikibase_variables
       WIKIBASE_PINGBACK:
       MW_WG_ENABLE_UPLOADS:
