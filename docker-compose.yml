@@ -57,8 +57,7 @@ services:
          - wikibase-docker.svc
     environment:
       VIRTUAL_HOST: movies-test.abes.fr
-      # container must handle mutliple path
-      VIRTUAL_PATH: ~ /(proxy/wikibase)?
+      VIRTUAL_PATH: /
       <<: *wikibase_variables
       WIKIBASE_PINGBACK:
       MW_WG_ENABLE_UPLOADS:
@@ -120,7 +119,8 @@ services:
          - ${WDQS_FRONTEND_HOST}
     environment:
       VIRTUAL_HOST: movies-test.abes.fr
-      VIRTUAL_PATH: /sparql
+      # container must handle mutliple path
+      VIRTUAL_PATH: ~ /(sparql|proxy/wikibase)
       VIRTUAL_DEST: /      
       WIKIBASE_HOST: ${WIKIBASE_HOST}
       WDQS_HOST: wdqs-proxy.svc
