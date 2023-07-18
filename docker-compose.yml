@@ -13,6 +13,11 @@ x-common-variables: &wikibase_variables
   DB_PASS: ${DB_PASS}
   DB_NAME: ${DB_NAME}
   WIKIBASE_HOST: ${WIKIBASE_HOST}
+  LDAP_SERVER: ${LDAP_SERVER}
+  LDAP_PORT: ${LDAP_PORT}
+  LDAP_USER: ${LDAP_USER}
+  LDAP_PASS: ${LDAP_PASS}
+  LDAP_DOMAIN: ${LDAP_DOMAIN}
 
 services:
 
