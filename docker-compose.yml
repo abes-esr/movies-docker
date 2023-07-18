@@ -61,8 +61,6 @@ services:
          - ${WIKIBASE_HOST}
          - wikibase-docker.svc
     environment:
-      VIRTUAL_HOST: movies-test.abes.fr
-      VIRTUAL_PATH: /
       <<: *wikibase_variables
       WIKIBASE_PINGBACK:
       MW_WG_ENABLE_UPLOADS:
@@ -123,9 +121,6 @@ services:
         aliases:
          - ${WDQS_FRONTEND_HOST}
     environment:
-      VIRTUAL_HOST: movies-test.abes.fr
-      VIRTUAL_PATH: /sparql
-      VIRTUAL_DEST: /
       WIKIBASE_HOST: ${WIKIBASE_HOST}
       WDQS_HOST: wdqs-proxy.svc
 
