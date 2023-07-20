@@ -65,6 +65,8 @@ services:
       WIKIBASE_PINGBACK:
       MW_WG_ENABLE_UPLOADS:
       QS_PUBLIC_SCHEME_HOST_AND_PORT:
+      WIKIBASE_URL_PUBLIQUE: ${WIKIBASE_URL_PUBLIQUE}
+      WIKIBASE_SCHEME: ${WIKIBASE_SCHEME}
 
   wikibase_jobrunner:
 #    image: "${WIKIBASE_BUNDLE_IMAGE_NAME}"
@@ -172,6 +174,8 @@ services:
      - WDQS_HOST=wdqs.svc
      - WDQS_PORT=9999
      # CONFIG - WIKIBASE_SCHEME can be set to 'https' if the updater should expect https concept uris
+     - WIKIBASE_URL_PUBLIQUE=${WIKIBASE_URL_PUBLIQUE}
+     - WIKIBASE_SCHEME=${WIKIBASE_SCHEME}
 
 volumes:
   query-service-data:
