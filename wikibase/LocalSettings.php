@@ -1,5 +1,8 @@
 <?php
 
+//Variable utilisée pour faire fonctionner l'autocompletion
+$wgServer = getenv('WIKIBASE_SCHEME') . "://" . getenv('WIKIBASE_URL_PUBLIQUE');
+
 // LOAD NUKE EXTENSION
 wfLoadExtension( 'Nuke' );
 wfLoadExtension( 'LDAPProvider' );
