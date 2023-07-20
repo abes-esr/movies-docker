@@ -170,11 +170,11 @@ services:
         aliases:
          - wdqs-updater.svc
     environment:
-     - WIKIBASE_HOST=${WIKIBASE_HOST}
+     #- WIKIBASE_HOST=${WIKIBASE_HOST}
+     - WIKIBASE_HOST=${WIKIBASE_URL_PUBLIQUE}
      - WDQS_HOST=wdqs.svc
      - WDQS_PORT=9999
      # CONFIG - WIKIBASE_SCHEME can be set to 'https' if the updater should expect https concept uris
-     - WIKIBASE_URL_PUBLIQUE=${WIKIBASE_URL_PUBLIQUE}
      - WIKIBASE_SCHEME=${WIKIBASE_SCHEME}
 
 volumes:
