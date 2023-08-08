@@ -3,21 +3,21 @@ version: '3.4'
 
 x-common-variables: &wikibase_variables
   DB_SERVER: mysql.svc:3306
-  MW_ADMIN_NAME: ${MW_ADMIN_NAME}
-  MW_ADMIN_PASS: ${MW_ADMIN_PASS}
-  MW_ADMIN_EMAIL: ${MW_ADMIN_EMAIL}
-  MW_WG_SECRET_KEY: ${MW_SECRET_KEY}
+  MW_ADMIN_NAME: ${MOVIES_MW_ADMIN_NAME}
+  MW_ADMIN_PASS: ${MOVIES_MW_ADMIN_PASS}
+  MW_ADMIN_EMAIL: ${MOVIES_MW_ADMIN_EMAIL}
+  MW_WG_SECRET_KEY: ${MOVIES_MW_SECRET_KEY}
   # Disable jobs running after requests when wikibase_jobrunner is defined
   MW_WG_JOB_RUN_RATE: 0
-  DB_USER: ${DB_USER}
-  DB_PASS: ${DB_PASS}
-  DB_NAME: ${DB_NAME}
-  WIKIBASE_HOST: ${WIKIBASE_HOST}
-  LDAP_SERVER: ${LDAP_SERVER}
-  LDAP_PORT: ${LDAP_PORT}
-  LDAP_USER: ${LDAP_USER}
-  LDAP_PASS: ${LDAP_PASS}
-  LDAP_DOMAIN: ${LDAP_DOMAIN}
+  DB_USER: ${MOVIES_DB_USER}
+  DB_PASS: ${MOVIES_DB_PASS}
+  DB_NAME: ${MOVIES_DB_NAME}
+  WIKIBASE_HOST: ${MOVIES_WIKIBASE_HOST}
+  LDAP_SERVER: ${MOVIES_LDAP_SERVER}
+  LDAP_PORT: ${MOVIES_LDAP_PORT}
+  LDAP_USER: ${MOVIES_LDAP_USER}
+  LDAP_PASS: ${MOVIES_LDAP_PASS}
+  LDAP_DOMAIN: ${MOVIES_LDAP_DOMAIN}
 
 services:
 
@@ -37,7 +37,7 @@ services:
       - default
 
   wikibase:
-#    image: "${WIKIBASE_BUNDLE_IMAGE_NAME}"
+#    image: "${MOVIES_WIKIBASE_BUNDLE_IMAGE_NAME}"
     build:
       context: ./wikibase
       dockerfile: Dockerfile
@@ -58,18 +58,18 @@ services:
     networks:
       default:
         aliases:
-         - ${WIKIBASE_HOST}
+         - ${MOVIES_WIKIBASE_HOST}
          - wikibase-docker.svc
     environment:
       <<: *wikibase_variables
       WIKIBASE_PINGBACK:
       MW_WG_ENABLE_UPLOADS:
       QS_PUBLIC_SCHEME_HOST_AND_PORT:
-      WIKIBASE_URL_PUBLIQUE: ${WIKIBASE_URL_PUBLIQUE}
-      WIKIBASE_SCHEME: ${WIKIBASE_SCHEME}
+      WIKIBASE_URL_PUBLIQUE: ${MOVIES_WIKIBASE_URL_PUBLIQUE}
+      WIKIBASE_SCHEME: ${MOVIES_WIKIBASE_SCHEME}
 
   wikibase_jobrunner:
-#    image: "${WIKIBASE_BUNDLE_IMAGE_NAME}"
+#    image: "${MOVIES_WIKIBASE_BUNDLE_IMAGE_NAME}"
     build:
       context: ./wikibase
       dockerfile: Dockerfile
@@ -93,19 +93,19 @@ services:
           - wikibase-jobrunner.svc
     environment:
       <<: *wikibase_variables
-      MAX_JOBS: ${MAX_JOBS}
+      MAX_JOBS: ${MOVIES_MAX_JOBS}
 
   mysql:
-    image: "${MYSQL_IMAGE_NAME}"
+    image: "${MOVIES_MYSQL_IMAGE_NAME}"
     container_name: movies_mysql
     restart: unless-stopped
     volumes:
       - mediawiki-mysql-data:/var/lib/mysql
     environment:
       # CONFIG - Change the default values below (should match values passed to wikibase)
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${MOVIES_DB_NAME}
+      MYSQL_USER: ${MOVIES_DB_USER}
+      MYSQL_PASSWORD: ${MOVIES_DB_PASS}
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
     networks:
       default:
@@ -113,7 +113,7 @@ services:
          - mysql.svc
 
   wdqs-frontend:
-    image: "${WDQS_FRONTEND_IMAGE_NAME}"
+    image: "${MOVIES_WDQS_FRONTEND_IMAGE_NAME}"
     container_name: movies_wdqs_frontend
     restart: unless-stopped
     depends_on:
@@ -121,13 +121,13 @@ services:
     networks:
       default:
         aliases:
-         - ${WDQS_FRONTEND_HOST}
+         - ${MOVIES_WDQS_FRONTEND_HOST}
     environment:
-      WIKIBASE_HOST: ${WIKIBASE_HOST}
+      WIKIBASE_HOST: ${MOVIES_WIKIBASE_HOST}
       WDQS_HOST: wdqs-proxy.svc
 
   wdqs:
-    image: "${WDQS_IMAGE_NAME}"
+    image: "${MOVIES_WDQS_IMAGE_NAME}"
     container_name: movies_wdqs
     restart: unless-stopped
     command: /runBlazegraph.sh
@@ -138,14 +138,14 @@ services:
         aliases:
          - wdqs.svc
     environment:
-      - WIKIBASE_HOST=${WIKIBASE_HOST}
+      - WIKIBASE_HOST=${MOVIES_WIKIBASE_HOST}
       - WDQS_HOST=wdqs.svc
       - WDQS_PORT=9999
     expose:
       - 9999
 
   wdqs-proxy:
-    image: "${WDQS_PROXY_IMAGE_NAME}"
+    image: "${MOVIES_WDQS_PROXY_IMAGE_NAME}"
     container_name: movies_wdqs_proxy
     restart: unless-stopped
     environment:
@@ -158,7 +158,7 @@ services:
          - wdqs-proxy.svc
 
   wdqs-updater:
-    image: "${WDQS_IMAGE_NAME}"
+    image: "${MOVIES_WDQS_IMAGE_NAME}"
     container_name: movies_wdqs_updater
     restart: unless-stopped
     command: /runUpdate.sh
@@ -170,12 +170,12 @@ services:
         aliases:
          - wdqs-updater.svc
     environment:
-     #- WIKIBASE_HOST=${WIKIBASE_HOST}
-     - WIKIBASE_HOST=${WIKIBASE_URL_PUBLIQUE}
+     #- WIKIBASE_HOST=${MOVIES_WIKIBASE_HOST}
+     - WIKIBASE_HOST=${MOVIES_WIKIBASE_URL_PUBLIQUE}
      - WDQS_HOST=wdqs.svc
      - WDQS_PORT=9999
      # CONFIG - WIKIBASE_SCHEME can be set to 'https' if the updater should expect https concept uris
-     - WIKIBASE_SCHEME=${WIKIBASE_SCHEME}
+     - WIKIBASE_SCHEME=${MOVIES_WIKIBASE_SCHEME}
 
 volumes:
   query-service-data:
