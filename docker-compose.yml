@@ -21,7 +21,7 @@ x-common-variables: &wikibase_variables
 
 services:
 
-  proxy:
+  movies_proxy:
     build: ./proxy
     restart: always
     ports:
@@ -39,7 +39,7 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
 
-  wikibase:
+  movies_wikibase:
 #    image: "${MOVIES_WIKIBASE_BUNDLE_IMAGE_NAME}"
     build:
       context: ./wikibase
@@ -74,7 +74,7 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
 
-  wikibase_jobrunner:
+  movies_wikibase_jobrunner:
 #    image: "${MOVIES_WIKIBASE_BUNDLE_IMAGE_NAME}"
     build:
       context: ./wikibase
@@ -104,7 +104,7 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
 
-  mysql:
+  movies_mysql:
     image: "${MOVIES_MYSQL_IMAGE_NAME}"
     container_name: movies_mysql
     restart: unless-stopped
@@ -124,7 +124,7 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
 
-  wdqs-frontend:
+  movies_wdqs-frontend:
     image: "${MOVIES_WDQS_FRONTEND_IMAGE_NAME}"
     container_name: movies_wdqs_frontend
     restart: unless-stopped
@@ -141,7 +141,7 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
 
-  wdqs:
+  movies_wdqs:
     image: "${MOVIES_WDQS_IMAGE_NAME}"
     container_name: movies_wdqs
     restart: unless-stopped
@@ -162,7 +162,7 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
 
-  wdqs-proxy:
+  movies_wdqs-proxy:
     image: "${MOVIES_WDQS_PROXY_IMAGE_NAME}"
     container_name: movies_wdqs_proxy
     restart: unless-stopped
@@ -178,7 +178,7 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
 
-  wdqs-updater:
+  movies_wdqs-updater:
     image: "${MOVIES_WDQS_IMAGE_NAME}"
     container_name: movies_wdqs_updater
     restart: unless-stopped
