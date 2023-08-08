@@ -35,6 +35,9 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       - default
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
 
   wikibase:
 #    image: "${MOVIES_WIKIBASE_BUNDLE_IMAGE_NAME}"
@@ -67,6 +70,9 @@ services:
       QS_PUBLIC_SCHEME_HOST_AND_PORT:
       WIKIBASE_URL_PUBLIQUE: ${MOVIES_WIKIBASE_URL_PUBLIQUE}
       WIKIBASE_SCHEME: ${MOVIES_WIKIBASE_SCHEME}
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
 
   wikibase_jobrunner:
 #    image: "${MOVIES_WIKIBASE_BUNDLE_IMAGE_NAME}"
@@ -94,6 +100,9 @@ services:
     environment:
       <<: *wikibase_variables
       MAX_JOBS: ${MOVIES_MAX_JOBS}
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
 
   mysql:
     image: "${MOVIES_MYSQL_IMAGE_NAME}"
@@ -111,6 +120,9 @@ services:
       default:
         aliases:
          - mysql.svc
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
 
   wdqs-frontend:
     image: "${MOVIES_WDQS_FRONTEND_IMAGE_NAME}"
@@ -125,6 +137,9 @@ services:
     environment:
       WIKIBASE_HOST: ${MOVIES_WIKIBASE_HOST}
       WDQS_HOST: wdqs-proxy.svc
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
 
   wdqs:
     image: "${MOVIES_WDQS_IMAGE_NAME}"
@@ -143,6 +158,9 @@ services:
       - WDQS_PORT=9999
     expose:
       - 9999
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
 
   wdqs-proxy:
     image: "${MOVIES_WDQS_PROXY_IMAGE_NAME}"
@@ -156,6 +174,9 @@ services:
       default:
         aliases:
          - wdqs-proxy.svc
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
 
   wdqs-updater:
     image: "${MOVIES_WDQS_IMAGE_NAME}"
@@ -176,6 +197,9 @@ services:
      - WDQS_PORT=9999
      # CONFIG - WIKIBASE_SCHEME can be set to 'https' if the updater should expect https concept uris
      - WIKIBASE_SCHEME=${MOVIES_WIKIBASE_SCHEME}
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
 
 volumes:
   query-service-data:
