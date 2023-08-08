@@ -73,6 +73,11 @@ docker-compose stop
 cd /opt/pod/movies-docker/
 docker-compose restart
 ```
+Avant de démarrer l'application, assurez-vous que le fichier wikibase/LocalSettings.php a les bonnes permissions. 
+Pour ce faire, exécutez la commande suivante : 
+```bash
+chmod 644 wikibase/LocalSettings.php
+```
 
 ## Supervision
 
