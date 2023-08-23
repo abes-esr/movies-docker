@@ -25,7 +25,7 @@ services:
     build: ./proxy
     restart: always
     ports:
-      - 12540:80
+      - ${MOVIES_PROXY_PORTS}
     volumes:
       - conf:/etc/nginx/conf.d
       - certs:/etc/nginx/certs:ro
@@ -51,10 +51,10 @@ services:
       dockerfile: Dockerfile
     container_name: movies_wikibase
     links:
-      - mysql
+      - movies_mysql
     depends_on:
-      - proxy
-      - mysql
+      - movies_proxy
+      - movies_mysql
     restart: unless-stopped
     volumes:
       ## This shares the configuration with jobrunner
@@ -93,9 +93,9 @@ services:
     entrypoint: /bin/bash
     command:  /jobrunner-entrypoint.sh
     links:
-      - mysql
+      - movies_mysql
     depends_on:
-      - mysql
+      - movies_mysql
     restart: always
     volumes:
       - shared:/shared/:ro
@@ -150,7 +150,7 @@ services:
     container_name: movies_wdqs_frontend
     restart: unless-stopped
     depends_on:
-      - wdqs-proxy
+      - movies_wdqs-proxy
     networks:
       default:
         aliases:
@@ -200,7 +200,7 @@ services:
     environment:
       - PROXY_PASS_HOST=wdqs.svc:9999
     depends_on:
-      - wdqs
+      - movies_wdqs
     networks:
       default:
         aliases:
@@ -220,8 +220,8 @@ services:
     restart: unless-stopped
     command: /runUpdate.sh
     depends_on:
-    - wdqs
-    - wikibase
+    - movies_wdqs
+    - movies_wikibase
     networks:
       default:
         aliases:
