@@ -2,7 +2,7 @@
 version: '3.4'
 
 x-common-variables: &wikibase_variables
-  DB_SERVER: movies_mysql.svc:3306
+  DB_SERVER: movies-mysql.svc:3306
   MW_ADMIN_NAME: ${MOVIES_MW_ADMIN_NAME}
   MW_ADMIN_PASS: ${MOVIES_MW_ADMIN_PASS}
   MW_ADMIN_EMAIL: ${MOVIES_MW_ADMIN_EMAIL}
@@ -106,7 +106,7 @@ services:
     networks:
       default:
         aliases:
-          - movies_wikibase_jobrunner.svc
+          - movies-wikibase-jobrunner.svc
     environment:
       <<: *wikibase_variables
       MAX_JOBS: ${MOVIES_MAX_JOBS}
@@ -134,7 +134,7 @@ services:
     networks:
       default:
         aliases:
-         - movies_mysql.svc
+         - movies-mysql.svc
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -157,7 +157,7 @@ services:
          - ${MOVIES_WDQS_FRONTEND_HOST}
     environment:
       WIKIBASE_HOST: ${MOVIES_WIKIBASE_HOST}
-      WDQS_HOST: movies_wdqs_proxy.svc
+      WDQS_HOST: movies-wdqs-proxy.svc
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -177,10 +177,10 @@ services:
     networks:
       default:
         aliases:
-         - movies_wdqs.svc
+         - movies-wdqs.svc
     environment:
       - WIKIBASE_HOST=${MOVIES_WIKIBASE_HOST}
-      - WDQS_HOST=movies_wdqs.svc
+      - WDQS_HOST=movies-wdqs.svc
       - WDQS_PORT=9999
     expose:
       - 9999
@@ -198,13 +198,13 @@ services:
     container_name: movies_wdqs_proxy
     restart: unless-stopped
     environment:
-      - PROXY_PASS_HOST=movies_wdqs.svc:9999
+      - PROXY_PASS_HOST=movies-wdqs.svc:9999
     depends_on:
       - movies_wdqs
     networks:
       default:
         aliases:
-         - movies_wdqs_proxy.svc
+         - movies-wdqs-proxy.svc
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -225,11 +225,11 @@ services:
     networks:
       default:
         aliases:
-         - movies_wdqs_updater.svc
+         - movies-wdqs-updater.svc
     environment:
      #- WIKIBASE_HOST=${MOVIES_WIKIBASE_HOST}
      - WIKIBASE_HOST=${MOVIES_WIKIBASE_URL_PUBLIQUE}
-     - WDQS_HOST=movies_wdqs.svc
+     - WDQS_HOST=movies-wdqs.svc
      - WDQS_PORT=9999
      # CONFIG - WIKIBASE_SCHEME can be set to 'https' if the updater should expect https concept uris
      - WIKIBASE_SCHEME=${MOVIES_WIKIBASE_SCHEME}
