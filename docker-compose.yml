@@ -2,7 +2,7 @@
 version: '3.4'
 
 x-common-variables: &wikibase_variables
-  DB_SERVER: mysql.svc:3306
+  DB_SERVER: movies_mysql.svc:3306
   MW_ADMIN_NAME: ${MOVIES_MW_ADMIN_NAME}
   MW_ADMIN_PASS: ${MOVIES_MW_ADMIN_PASS}
   MW_ADMIN_EMAIL: ${MOVIES_MW_ADMIN_EMAIL}
@@ -23,9 +23,10 @@ services:
 
   movies_proxy:
     build: ./proxy
+    container_name: movies_proxy
     restart: always
     ports:
-      - ${MOVIES_PROXY_PORTS}
+      - "${MOVIES_PROXY_PORT}:80"
     volumes:
       - conf:/etc/nginx/conf.d
       - certs:/etc/nginx/certs:ro
@@ -67,11 +68,10 @@ services:
       default:
         aliases:
          - ${MOVIES_WIKIBASE_HOST}
-         - wikibase-docker.svc
     environment:
       <<: *wikibase_variables
-      WIKIBASE_PINGBACK:
-      MW_WG_ENABLE_UPLOADS:
+      WIKIBASE_PINGBACK: ${MOVIES_WIKIBASE_PINGBACK}
+      MW_WG_ENABLE_UPLOADS: ${MOVIES_MW_WG_ENABLE_UPLOADS}
       QS_PUBLIC_SCHEME_HOST_AND_PORT:
       WIKIBASE_URL_PUBLIQUE: ${MOVIES_WIKIBASE_URL_PUBLIQUE}
       WIKIBASE_SCHEME: ${MOVIES_WIKIBASE_SCHEME}
@@ -106,7 +106,7 @@ services:
     networks:
       default:
         aliases:
-          - wikibase-jobrunner.svc
+          - movies_wikibase_jobrunner.svc
     environment:
       <<: *wikibase_variables
       MAX_JOBS: ${MOVIES_MAX_JOBS}
@@ -134,7 +134,7 @@ services:
     networks:
       default:
         aliases:
-         - mysql.svc
+         - movies_mysql.svc
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -145,19 +145,19 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_mysql"
     
 
-  movies_wdqs-frontend:
+  movies_wdqs_frontend:
     image: "${MOVIES_WDQS_FRONTEND_IMAGE_NAME}"
     container_name: movies_wdqs_frontend
     restart: unless-stopped
     depends_on:
-      - movies_wdqs-proxy
+      - movies_wdqs_proxy
     networks:
       default:
         aliases:
          - ${MOVIES_WDQS_FRONTEND_HOST}
     environment:
       WIKIBASE_HOST: ${MOVIES_WIKIBASE_HOST}
-      WDQS_HOST: wdqs-proxy.svc
+      WDQS_HOST: movies_wdqs_proxy.svc
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -165,7 +165,7 @@ services:
       - "co.elastic.logs/enabled=true"
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
-      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_wdqs-frontend"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_wdqs_frontend"
 
   movies_wdqs:
     image: "${MOVIES_WDQS_IMAGE_NAME}"
@@ -177,10 +177,10 @@ services:
     networks:
       default:
         aliases:
-         - wdqs.svc
+         - movies_wdqs.svc
     environment:
       - WIKIBASE_HOST=${MOVIES_WIKIBASE_HOST}
-      - WDQS_HOST=wdqs.svc
+      - WDQS_HOST=movies_wdqs.svc
       - WDQS_PORT=9999
     expose:
       - 9999
@@ -193,18 +193,18 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_wdqs"
 
-  movies_wdqs-proxy:
+  movies_wdqs_proxy:
     image: "${MOVIES_WDQS_PROXY_IMAGE_NAME}"
     container_name: movies_wdqs_proxy
     restart: unless-stopped
     environment:
-      - PROXY_PASS_HOST=wdqs.svc:9999
+      - PROXY_PASS_HOST=movies_wdqs.svc:9999
     depends_on:
       - movies_wdqs
     networks:
       default:
         aliases:
-         - wdqs-proxy.svc
+         - movies_wdqs_proxy.svc
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -212,9 +212,9 @@ services:
       - "co.elastic.logs/enabled=true"
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
-      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_wdqs-proxy"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_wdqs_proxy"
 
-  movies_wdqs-updater:
+  movies_wdqs_updater:
     image: "${MOVIES_WDQS_IMAGE_NAME}"
     container_name: movies_wdqs_updater
     restart: unless-stopped
@@ -225,11 +225,11 @@ services:
     networks:
       default:
         aliases:
-         - wdqs-updater.svc
+         - movies_wdqs_updater.svc
     environment:
      #- WIKIBASE_HOST=${MOVIES_WIKIBASE_HOST}
      - WIKIBASE_HOST=${MOVIES_WIKIBASE_URL_PUBLIQUE}
-     - WDQS_HOST=wdqs.svc
+     - WDQS_HOST=movies_wdqs.svc
      - WDQS_PORT=9999
      # CONFIG - WIKIBASE_SCHEME can be set to 'https' if the updater should expect https concept uris
      - WIKIBASE_SCHEME=${MOVIES_WIKIBASE_SCHEME}
@@ -240,7 +240,7 @@ services:
       - "co.elastic.logs/enabled=true"
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
-      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_wdqs-updater"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_wdqs_updater"
 
 volumes:
   query-service-data:
