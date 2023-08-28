@@ -1,14 +1,25 @@
 <?php
 
-//Variable utilisée pour faire fonctionner l'autocompletion
-$wgServer = getenv('WIKIBASE_SCHEME') . "://" . getenv('WIKIBASE_URL_PUBLIQUE');
-
 // LOAD NUKE EXTENSION
 wfLoadExtension( 'Nuke' );
+
+// LDAP
 wfLoadExtension( 'LDAPProvider' );
 wfLoadExtension( 'PluggableAuth' );
 wfLoadExtension( 'LDAPAuthentication2');
+wfLoadExtension( 'LDAPAuthorization' );
+wfLoadExtension( 'LDAPUserInfo' );
+wfLoadExtension( 'LDAPGroups' );
 
+// Disable anonymous editing
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['user']['edit'] = false;
+$wgGroupPermissions['sysop']['edit'] = true;
+
+$wgGroupPermissions['*']['createaccount'] = false;
+$wgGroupPermissions['*']['autocreateaccount'] = true;
+
+// Authentification LDAP 
 $LDAPProviderDomainConfigProvider = function() {
     $config = [
         'levant.abes.fr' => [
@@ -33,21 +44,33 @@ $LDAPProviderDomainConfigProvider = function() {
                     'spacestounderscores',
                     'lowercase'
                 ]
-            ]
+            ],
+			'userinfo' => [],
+			'authorization' => [
+				'rules' => [
+					'attributes' => [					
+						'mail' => explode(',', getenv('LDAP_MAILS'))
+					]
+				]
+			],
+			'groupsync' => [
+				'mapping' => [
+					'sysop' => 'CN=Utilisateur_GED,OU=GED_EXAGED,OU=Groupes de securite,DC=levant,DC=abes,DC=fr'
+				]
+			]
         ]
     ];
-		return new \MediaWiki\Extension\LDAPProvider\DomainConfigProvider\InlinePHPArray($config);
-	};
+	return new \MediaWiki\Extension\LDAPProvider\DomainConfigProvider\InlinePHPArray($config);
+};
 
-
-	// Si la connexion locale est également prise en charge, ces variables globales sont toujours nécessaires 
+// Si la connexion locale est également prise en charge, ces variables globales sont toujours nécessaires 
 $wgPluggableAuth_EnableLocalLogin  =  true ; 
 $LDAPAuthentication2AllowLocalLogin  =  true ; 
 $wgPluggableAuth_Class  =  "MediaWiki\\Extension\\LDAPAuthentication2\\PluggableAuth" ; 
 $wgPluggableAuth_ButtonLabel  =  "Connexion (PluggableAuth)" ;
 
 
-$wgPluggableAuth_Config [ 'Log In (LDAP)' ]  =  [ 
+$wgPluggableAuth_Config [ 'Connexion LDAP' ]  =  [ 
     'plugin'  =>  'LDAPAuthentication2' , 
     'data'  =>  [ 
         'domain'  =>  getenv('LDAP_DOMAIN')

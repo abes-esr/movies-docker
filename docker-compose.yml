@@ -18,6 +18,7 @@ x-common-variables: &wikibase_variables
   LDAP_USER: ${MOVIES_LDAP_USER}
   LDAP_PASS: ${MOVIES_LDAP_PASS}
   LDAP_DOMAIN: ${MOVIES_LDAP_DOMAIN}
+  LDAP_MAILS: ${MOVIES_LDAP_MAILS}
 
 services:
 
