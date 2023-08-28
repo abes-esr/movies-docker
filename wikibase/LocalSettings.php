@@ -1,5 +1,8 @@
 <?php
 
+//Variable utilisée pour faire fonctionner l'autocompletion (mais warning dans jobrunner...)
+$wgServer = getenv('WIKIBASE_SCHEME') . "://" . getenv('WIKIBASE_URL_PUBLIQUE');
+
 // LOAD NUKE EXTENSION
 wfLoadExtension( 'Nuke' );
 
