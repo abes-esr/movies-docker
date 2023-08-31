@@ -243,6 +243,23 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_wdqs_updater"
 
+  movies_ephemere:
+    image: dwdraju/alpine-curl-jq
+    container_name: movies_ephemere
+    profiles: ["oneshot"]
+    environment:
+      - NAME=${MOVIES_MW_ADMIN_NAME}
+      - PASS=${MOVIES_MW_ADMIN_PASS}
+      - MOVIES_WIKIBASE_HOST=${MOVIES_WIKIBASE_HOST}
+    volumes:
+      - ./ephemere:/home/data
+    command: /bin/sh -c "sh /home/data/createData.sh"
+    networks:
+      default:
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
+
 volumes:
   query-service-data:
   shared:
