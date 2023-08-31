@@ -49,7 +49,13 @@ cp .env-dist .env
 Démarrer l'application :
 ```bash
 cd /opt/pod/movies-docker/
-docker-compose up -d
+docker-compose up --build-d
+```
+
+Pour injecter les propriétés et classes : 
+```bash
+cd /opt/pod/movies-docker/
+docker compose --profile oneshot up -d
 ```
 
 ## Démarrage et arrêt
