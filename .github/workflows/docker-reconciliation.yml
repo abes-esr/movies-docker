@@ -28,6 +28,7 @@ jobs:
           COMMIT_ID:  ${{ github.event.inputs.commitId }}
         run: |
           git clone https://gitlab.com/nfdi4culture/ta1-data-enrichment/openrefine-wikibase.git
+          cd openrefine-wikibase/
           git reset --hard $COMMIT_ID
 
       - name: "Build: build docker image"
