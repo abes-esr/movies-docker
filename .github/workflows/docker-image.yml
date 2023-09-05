@@ -1,0 +1,54 @@
+name: Genere une image Docker du service reconciliation
+
+env:
+  DOCKERHUB_IMAGE_PREFIX: abesesr/movies-reconciliation
+  
+on:
+  workflow_dispatch:
+    inputs:
+      commitId:
+        description: 'Commit id'
+        required: true
+        default: '9a7c0a3ad7b445d808a6f4615dc9a953715d75fc'
+      releaseVersion:
+        description: 'Version de la release (semver)'
+        required: true
+        default: 'x.x.x'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      #token: ${{ secrets.TOKEN_GITHUB_FOR_GITHUB_ACTION }}
+
+      - name: 'Clone repository : '
+        env:
+          COMMIT_ID:  ${{ github.event.inputs.commitId }}
+        run: |
+          git clone https://gitlab.com/nfdi4culture/ta1-data-enrichment/openrefine-wikibase.git
+          git reset --hard $COMMIT_ID
+
+      - name: "Build: build docker image"
+        run: |
+          docker build . -t localimage:latest
+
+      - name: "Push: prepare version from git tags/branchs"
+        id: docker_tag_meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.DOCKERHUB_IMAGE_PREFIX }}
+      - name: "Push: login to DockerHub"
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin  
+      - name: "Push: push docker image"
+        if: github.event_name != 'pull_request'
+        run: |
+          DOCKER_TAGS="${{ steps.docker_tag_meta.outputs.tags }}"
+          for DOCKER_TAG in $DOCKER_TAGS
+          do
+            docker build . --target web-image -t ${DOCKER_TAG}-web
+            docker push ${DOCKER_TAG}-web
+          done
