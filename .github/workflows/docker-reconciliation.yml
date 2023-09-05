@@ -33,9 +33,8 @@ jobs:
 
       - name: "Build: build docker image"
         run: |
-          ls -l
-          pwd
-          docker build . -t localimage:latest -f Dockerfile .
+          cd openrefine-wikibase/
+          docker build . -t localimage:latest
 
       - name: "Push: prepare version from git tags/branchs"
         id: docker_tag_meta
