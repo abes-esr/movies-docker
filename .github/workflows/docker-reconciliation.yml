@@ -30,6 +30,12 @@ jobs:
           git clone https://gitlab.com/nfdi4culture/ta1-data-enrichment/openrefine-wikibase.git
           cd openrefine-wikibase/
           git reset --hard $COMMIT_ID
+
+      - name: "Push: prepare version from git tags/branchs"
+        id: docker_tag_meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.DOCKERHUB_IMAGE_PREFIX }}
       
       - name: "Push: login to DockerHub"
         if: github.event_name != 'pull_request'
