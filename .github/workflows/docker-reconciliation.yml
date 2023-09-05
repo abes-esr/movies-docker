@@ -30,12 +30,6 @@ jobs:
           git clone https://gitlab.com/nfdi4culture/ta1-data-enrichment/openrefine-wikibase.git
           cd openrefine-wikibase/
           git reset --hard $COMMIT_ID
-
-      - name: "Push: prepare version from git tags/branchs"
-        id: docker_tag_meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.DOCKERHUB_IMAGE_PREFIX }}
       
       - name: "Push: login to DockerHub"
         if: github.event_name != 'pull_request'
@@ -46,11 +40,7 @@ jobs:
         env:
           RELEASE_TAG:  ${{ github.event.inputs.releaseVersion }}
         run: |
-          cd openrefine-wikibase/          
-          DOCKER_TAGS="${{ steps.docker_tag_meta.outputs.tags }}"
-          for DOCKER_TAG in $DOCKER_TAGS
-          do
-            echo "ICI : ".${DOCKER_TAG}          
-            docker build . -t ${DOCKER_TAG}-reconciliation-${RELEASE_TAG}
-            docker push ${DOCKER_TAG}-reconciliation-${RELEASE_TAG}
-          done  
+          cd openrefine-wikibase/                 
+          docker build . -t ${{ env.DOCKERHUB_IMAGE_PREFIX }}:${RELEASE_TAG}
+          docker push ${{ env.DOCKERHUB_IMAGE_PREFIX }}:${RELEASE_TAG}
+
