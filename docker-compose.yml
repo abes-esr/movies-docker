@@ -23,7 +23,10 @@ x-common-variables: &wikibase_variables
 services:
 
   movies_proxy:
-    build: ./proxy
+    build: 
+      context: ./proxy
+      args: 
+        MOVIES_WIKIBASE_URL_PUBLIQUE: ${MOVIES_WIKIBASE_URL_PUBLIQUE}
     container_name: movies_proxy
     restart: always
     ports:
