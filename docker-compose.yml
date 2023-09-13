@@ -263,6 +263,43 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
 
+  movies_db_dumper:
+    image: tiredofit/db-backup:3.9.11
+    container_name: movies_db_dumper
+    restart: unless-stopped
+    volumes:
+        - ${MOVIES_DB_DUMP_WORKDIR}:/backup/
+    depends_on:
+        - movies_mysql
+    environment:
+      # DB_DUMP_BEGIN: "0130" <= tous les jours à 1h30 du matin GMT
+      # DB_DUMP_FREQ: 1440 <= chaque jour
+      # DB_CLEANUP_TIME: 10080 (1440*7) <= conserve uniquement les 7 derniers jours
+      TIMEZONE: "Europe/Paris"
+      CONTAINER_ENABLE_MONITORING: "FALSE"
+      DB_TYPE: "mysql"
+      DB_HOST: "movies_mysql"
+      DB_NAME: ${MOVIES_DB_NAME}
+      DB_USER: ${MOVIES_DB_USER}
+      DB_PASS: ${MOVIES_DB_PASS}
+      DB_DUMP_BEGIN: "2359"
+      DB_DUMP_FREQ: "1440"
+      DB_CLEANUP_TIME: "10080"
+      CHECKSUM: "SHA1"
+      COMPRESSION: "GZ"
+      SPLIT_DB: "FALSE"
+      DEBUG_MODE: "FALSE"
+    networks:
+      default:
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
+    labels:
+      - "co.elastic.logs/enabled=true"
+      - "co.elastic.logs/processors.add_fields.target="
+      - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies_db_dumper"    
+
 volumes:
   query-service-data:
   shared:
