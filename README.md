@@ -169,7 +169,7 @@ zcat /docker-backup/movies/mysql_all_movies_mysql_XXXX-XXXX.sql.gz | sudo docker
 Lancez alors toute l'application movies et vérifiez qu'elle fonctionne bien :
 ```bash
 cd /opt/pod/movies-docker/
-docker-compose up -d
+docker-compose up -d 
 ```
 
 ## Développements
