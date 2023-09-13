@@ -155,7 +155,6 @@ Restaurez ensuite le dernier dump de la base de données postgresql de movies :
    ```bash
    docker exec -it movies-db-dumper restore
    ```
-- ou bien 
 - C'est bon, la base de données movies est alors restaurée
 
 2)  
