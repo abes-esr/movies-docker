@@ -10,11 +10,11 @@ Ce dépôt contient la configuration docker 🐳 pour déployer l'application mo
 
 ## URLs de movies
 
-Les URLs correspondantes aux déploiements en local, dev, test et prod de movies sont les suivantes :
+Les URLs correspondantes aux déploiements en local, test et prod de movies sont les suivantes :
 
 - local :
-  - http://127.0.0.1:80/ : URL interne de movies
-  - http://127.0.0.1:11082/ : URL interne de l'adminer
+  - http://lap-TRI.levant.abes.fr : homepage de movies
+  - http://lap-TRI.levant.abes.fr:11082/ : URL interne de l'adminer
 - test :
   - https://movies-test.abes.fr : homepage de movies
   - https://diplotaxis5-test.v202.abes.fr:80/ : URL interne de movies
@@ -41,21 +41,22 @@ Configurer l'application depuis l'exemple du [fichier ``.env-dist``](./.env-dist
 ```bash
 cd /opt/pod/movies-docker/
 cp .env-dist .env
-# personnaliser alors le contenu du .env
+# personnaliser alors le contenu du .env : indiquer les mots de passe et : le prefix de l'url (MOVIES_WIKIBASE_SCHEME), l'url publique (MOVIES_WIKIBASE_URL_PUBLIQUE), et le port du reverse proxy (MOVIES_PROXY_PORT).
 ```
 
 **Note : les mots de passe ne sont pas présent dans le fichier au moment de la copie. Vous devez aller les renseigner manuellement en éditant le fichier dans la console avec nano par exemple**
 
+Avant de démarrer l'application, assurez-vous que le fichier wikibase/LocalSettings.php ait les bonnes permissions. 
+Pour ce faire, exécutez la commande suivante : 
+```bash
+cd /opt/pod/movies-docker/
+chmod 644 wikibase/LocalSettings.php
+```
+
 Démarrer l'application :
 ```bash
 cd /opt/pod/movies-docker/
-docker-compose up --build-d
-```
-
-Pour injecter les propriétés et classes : 
-```bash
-cd /opt/pod/movies-docker/
-docker compose --profile oneshot up -d
+docker-compose up --build -d
 ```
 
 ## Démarrage et arrêt
@@ -79,10 +80,13 @@ docker-compose stop
 cd /opt/pod/movies-docker/
 docker-compose restart
 ```
-Avant de démarrer l'application, assurez-vous que le fichier wikibase/LocalSettings.php a les bonnes permissions. 
-Pour ce faire, exécutez la commande suivante : 
+
+# pour injecter les propriétés et classes dans un wikibase vide : 
 ```bash
-chmod 644 wikibase/LocalSettings.php
+cd /opt/pod/movies-docker/
+docker compose --profile oneshot up -d
+ou 
+docker compose run --rm movies_ephemere
 ```
 
 ## Supervision
@@ -130,17 +134,19 @@ Le fait de passer ``MOVIES_WATCHTOWER_RUN_ONCE`` à false va faire en sorte d'ex
 
 Les éléments suivants sont à sauvegarder:
 - ``/opt/pod/movies-docker/.env`` : contient la configuration spécifique de notre déploiement
-- ``/opt/pod/movies-docker/volumes/movies-db/dump/`` : contient les dumps quotidiens de la base de données maria-db de movies
-
-Le répertoire suivant est à exclure des sauvegardes :
-- ``/opt/pod/movies-docker/volumes/movies-db/data/`` : contient les données binaires de la base de données maria-db movies
+- ``/docker-backup/movies/`` : contient les dumps quotidiens de la base de données maria-db de movies
 
 ### Restauration depuis une sauvegarde
 
 Réinstallez l'application movies depuis la [procédure d'installation ci-dessus](#installation) et récupéré depuis les sauvegardes le fichier ``.env`` et placez le dans ``/opt/pod/movies-docker/.env`` sur la machine qui doit faire repartir movies.
 
 Restaurez ensuite le dernier dump de la base de données postgresql de movies :
-- récupérer le dernier dump généré par ``movies-db-dumper`` depuis le système de sauvegarde (le fichier dump ressemble à ceci ``sql_movies_movies-db_20220801-143201.sql.gz``) et placez le fichier dump récupéré (sans le décompresser) dans ``/opt/pod/movies-docker/volumes/movies-db/dump/`` sur la machine qui doit faire repartir movies
+- récupérer le dernier dump généré par ``movies-db-dumper`` depuis le système de sauvegarde (le fichier dump ressemble à ceci ``mysql_all_movies_mysql_20230913-144637.sql.gz``) et placez le fichier dump récupéré (sans le décompresser) dans ``/docker-backup/movies/`` sur la machine qui doit faire repartir movies  
+
+2 possiblités :  
+
+1)  
+
 - ensuite lancez uniquement les conteneurs ``movies-db`` et ``movies-db-dumper`` :
    ```bash
    docker-compose up -d movies-db movies-db-dumper
@@ -149,7 +155,16 @@ Restaurez ensuite le dernier dump de la base de données postgresql de movies :
    ```bash
    docker exec -it movies-db-dumper restore
    ```
+- ou bien 
 - C'est bon, la base de données movies est alors restaurée
+
+2)  
+
+Lancer la commande : 
+```bash
+cd /opt/pod/movies-docker/
+zcat /docker-backup/movies/mysql_all_movies_mysql_XXXX-XXXX.sql.gz | sudo docker exec -u mysql -i movies_mysql mysql --user sqluser --password=XXXX
+```
 
 Lancez alors toute l'application movies et vérifiez qu'elle fonctionne bien :
 ```bash
@@ -173,7 +188,7 @@ Pour récupérer et démarrer la dernière version de l'application vous pouvez 
 docker-compose pull
 docker-compose up
 ```
-Le ``pull`` aura pour effet de télécharger l'éventuelle dernière images docker disponible pour la version glissante en cours (ex: ``develop-api`` ou ``main-api``). Sans le pull c'est la dernière image téléchargée qui sera utilisée.
+Le ``pull`` aura pour effet de télécharger l'éventuelle dernière images docker disponible pour la version glissante en cours (ex: ``develop`` ou ``main``). Sans le pull c'est la dernière image téléchargée qui sera utilisée.
 
 Ou bien [lancer le conteneur ``movies-watchtower``](https://github.com/abes-esr/movies-docker/blob/develop/README.md#d%C3%A9ploiement-continu) qui le fera automatiquement toutes les quelques secondes pour vous.
 
