@@ -41,7 +41,7 @@ Configurer l'application depuis l'exemple du [fichier ``.env-dist``](./.env-dist
 ```bash
 cd /opt/pod/movies-docker/
 cp .env-dist .env
-# personnaliser alors le contenu du .env : indiquer les mots de passe et : le prefix de l'url (MOVIES_WIKIBASE_SCHEME), l'url publique (MOVIES_WIKIBASE_URL_PUBLIQUE), et le port du reverse proxy (MOVIES_PROXY_PORT).
+# personnaliser alors le contenu du .env : indiquer les mots de passe et : le prefix de l'url (MOVIES_WIKIBASE_SCHEME), l'url publique (MOVIES_WIKIBASE_URL_PUBLIQUE), et le port du reverse proxy (MOVIES_RP_PORT).
 ```
 
 **Note : les mots de passe ne sont pas présent dans le fichier au moment de la copie. Vous devez aller les renseigner manuellement en éditant le fichier dans la console avec nano par exemple**
@@ -84,9 +84,9 @@ docker-compose restart
 # pour injecter les propriétés et classes dans un wikibase vide : 
 ```bash
 cd /opt/pod/movies-docker/
-docker compose --profile oneshot up -d
+docker compose --profile initializer up -d
 ou 
-docker compose run --rm movies_ephemere
+docker compose run --rm movies-initializer
 ```
 
 ## Supervision
@@ -162,7 +162,7 @@ Restaurez ensuite le dernier dump de la base de données postgresql de movies :
 Lancer la commande : 
 ```bash
 cd /opt/pod/movies-docker/
-zcat /docker-backup/movies/mysql_all_movies_mysql_XXXX-XXXX.sql.gz | sudo docker exec -u mysql -i movies_mysql mysql --user sqluser --password=XXXX
+zcat /docker-backup/movies/mysql_all_movies_mysql_XXXX-XXXX.sql.gz | sudo docker exec -u mysql -i movies-wikibase-mysql mysql --user sqluser --password=XXXX
 ```
 
 Lancez alors toute l'application movies et vérifiez qu'elle fonctionne bien :
