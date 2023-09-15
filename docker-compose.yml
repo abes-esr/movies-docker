@@ -21,12 +21,9 @@ x-common-variables: &wikibase_variables
   LDAP_MAILS: ${MOVIES_WIKIBASE_LDAP_MAILS}
 
 services:
-
-  movies-rp:
-    build: 
-      context: ./proxy
-      args: 
-        MOVIES_WIKIBASE_URL_PUBLIQUE: ${MOVIES_WIKIBASE_URL_PUBLIQUE}
+   
+  movies-rp:    
+    image: nginx:1.25
     container_name: movies-rp
     restart: unless-stopped
     ports:
@@ -38,8 +35,13 @@ services:
       - html:/usr/share/nginx/html
       - dhparam:/etc/nginx/dhparam
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./reverse-proxy/uploadsize.conf:/etc/nginx/conf.d/uploadsize.conf
+      # Voir https://hub.docker.com/_/nginx/ : "using environnment variables"      
+      - ./reverse-proxy/wikibase.conf.template:/etc/nginx/templates/wikibase.conf.template
     networks:
       - default
+    environment:
+      MOVIES_WIKIBASE_URL_PUBLIQUE: ${MOVIES_WIKIBASE_URL_PUBLIQUE}
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
