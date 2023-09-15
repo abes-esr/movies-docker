@@ -118,7 +118,7 @@ upstream upstream-movies-wikibase-wdqs-frontend {
     server movies-wikibase-wdqs-frontend;
 }
 server {
-    server_name $MOVIES_WIKIBASE_URL_PUBLIQUE;
+    server_name ${MOVIES_WIKIBASE_URL_PUBLIQUE};
     http2 on;
     access_log /var/log/nginx/access.log vhost;
     listen 80 ;
