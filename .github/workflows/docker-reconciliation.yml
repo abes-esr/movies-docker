@@ -1,7 +1,7 @@
 name: Genere une image Docker du service reconciliation
 
 env:
-  DOCKERHUB_IMAGE_PREFIX: abesesr/movies-reconciliation
+  DOCKERHUB_IMAGE_PREFIX: abesesr/movies
   
 on:
   workflow_dispatch:
@@ -41,6 +41,6 @@ jobs:
           RELEASE_TAG:  ${{ github.event.inputs.releaseVersion }}
         run: |
           cd openrefine-wikibase/                 
-          docker build . -t ${{ env.DOCKERHUB_IMAGE_PREFIX }}:${RELEASE_TAG}
-          docker push ${{ env.DOCKERHUB_IMAGE_PREFIX }}:${RELEASE_TAG}
+          docker build . -t ${{ env.DOCKERHUB_IMAGE_PREFIX }}:${RELEASE_TAG}-reconciliation
+          docker push ${{ env.DOCKERHUB_IMAGE_PREFIX }}:${RELEASE_TAG}-reconciliation
 
