@@ -86,6 +86,8 @@ services:
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-wikibase"
+      # pour que les mises à jour de cette image soient auto-déployées par watchtower
+      - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
 
   movies-wikibase-jobrunner:
     image: abesesr/movies:develop-wikibase
@@ -118,6 +120,8 @@ services:
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-wikibase-jobrunner"
+      # pour que les mises à jour de cette image soient auto-déployées par watchtower
+      - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
 
   movies-wikibase-mysql:
     image: "mariadb:${MOVIES_WIKIBASE_MYSQL_IMAGE_VERSION}"
@@ -297,22 +301,22 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-db-dumper"    
       
   movies-docusaurus:
-    image: abesesr/movies:${MOVIES_DOCUSAURUS_VERSION}
+    image: abesesr/movies:${MOVIES_DOCUSAURUS_IMAGE_VERSION}-documentation
     container_name: movies-docusaurus
     restart: unless-stopped
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
     environment:
-      HTTP_BASEURL: ${MOVIES_DOCUSAURUS_HTTP_BASEURL}
+      HTTP_BASEURL: ${MOVIES_WIKIBASE_URL_PUBLIQUE}/doc
     ports:
       - ${MOVIES_DOCUSAURUS_HTTP_PORT}:80
     labels:
       # pour envoyer les logs dans le puits de log de l'abes
       - "co.elastic.logs/enabled=true"
       - "co.elastic.logs/processors.add_fields.target="
-      - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies-docusaurus"
-      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=nginx"
+      - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-docusaurus"
       # pour que les mises à jour de cette image soient auto-déployées par watchtower
       - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
 
