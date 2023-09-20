@@ -56,7 +56,7 @@ chmod 644 wikibase/LocalSettings.php
 Démarrer l'application :
 ```bash
 cd /opt/pod/movies-docker/
-docker-compose up --build -d
+docker-compose up -d
 ```
 
 ## Démarrage et arrêt

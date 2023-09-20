@@ -52,9 +52,7 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-rp"
 
   movies-wikibase:
-    build:
-      context: ./wikibase
-      dockerfile: Dockerfile
+    image: abesesr/movies:develop-wikibase
     container_name: movies-wikibase
     links:
       - movies-wikibase-mysql
@@ -90,9 +88,7 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-wikibase"
 
   movies-wikibase-jobrunner:
-    build:
-      context: ./wikibase
-      dockerfile: Dockerfile
+    image: abesesr/movies:develop-wikibase
     container_name: movies-wikibase-jobrunner
     entrypoint: /bin/bash
     command:  /jobrunner-entrypoint.sh
