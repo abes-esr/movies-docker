@@ -298,7 +298,44 @@ services:
       - "co.elastic.logs/enabled=true"
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
-      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-db-dumper"    
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-db-dumper"
+
+  redis:
+    image: "redis:alpine"
+    container_name: openrefine_redis
+    expose:
+      - "6379"
+
+  movies-reconciliation:
+    image: abesesr/movies:0.0.1-reconciliation
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+    container_name: movies-reconciliation
+    restart: unless-stopped    
+    ports:
+     - "8000:8000"
+    volumes:
+#     - ./reconciliation/config.py:/openrefine-wikibase/config.py
+#     - ./reconciliation/manifest.json:/openrefine-wikibase/static/manifest.json
+     - ./reconciliation/config.sh:/openrefine-wikibase/config.sh
+    environment:
+     - WIKIBASE_NAME=wikibase-docker
+     - WIKIBASE_ADDRESS=${MOVIES_WIKIBASE_URL_PUBLIQUE}
+     - RECONCILE_ADDRESS="${MOVIES_WIKIBASE_SCHEME}://${MOVIES_WIKIBASE_URL_PUBLIQUE}/reconciliation/"
+     - QUERY_ADDRESS=${MOVIES_WIKIBASE_URL_PUBLIQUE}
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
+    command: >
+      sh -c "sh /openrefine-wikibase/config.sh && python app.py"
+    labels:
+      - "co.elastic.logs/enabled=true"
+      - "co.elastic.logs/processors.add_fields.target="
+      - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-reconciliation"     
+    depends_on:
+     - redis      
       
   movies-docusaurus:
     image: abesesr/movies:${MOVIES_DOCUSAURUS_IMAGE_VERSION}-documentation
