@@ -167,9 +167,14 @@ server {
         proxy_pass http://upstream-movies-wikibase;
         set $upstream_keepalive false;
     }
-	
-	
-	
+
+    location /doc {
+        proxy_pass http://movies-docusaurus;
+        set $upstream_keepalive false;
+    }
+
+
+
 	
     location /proxy/wikibase {
         rewrite /proxy/wikibase/(.*) /$1 break;
