@@ -300,11 +300,22 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-db-dumper"
 
-  redis:
+  movies-reconciliation-redis:
     image: "redis:alpine"
-    container_name: openrefine_redis
+    container_name: movies-reconciliation-redis
     expose:
       - "6379"
+    restart: unless-stopped
+    networks:
+      - default
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
+    labels:
+      - "co.elastic.logs/enabled=true"
+      - "co.elastic.logs/processors.add_fields.target="
+      - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-reconciliation-redis"      
 
   movies-reconciliation:
     image: abesesr/movies:0.0.1-reconciliation
@@ -312,7 +323,9 @@ services:
 #      context: .
 #      dockerfile: Dockerfile
     container_name: movies-reconciliation
-    restart: unless-stopped    
+    restart: unless-stopped
+    networks:
+      - default    
     ports:
      - "8000:8000"
     volumes:
@@ -335,7 +348,7 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-reconciliation"     
     depends_on:
-     - redis      
+     - movies-reconciliation-redis      
       
   movies-docusaurus:
     image: abesesr/movies:${MOVIES_DOCUSAURUS_IMAGE_VERSION}-documentation
