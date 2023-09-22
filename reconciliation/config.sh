@@ -50,7 +50,7 @@ echo "
       \"url_schema\": \"([[:toollabs:editgroups-commons/b/OR/\${batch_id}|details]])\"
     }
   }
-" > manifest.json
+" > static/manifest.json
 
 echo "manifest.json processed"
 
@@ -127,7 +127,7 @@ wd_api_max_search_results = 50 # need a bot account to get more
 validation_threshold = 95
 
 # Redis client used for caching at various places
-redis_uri = 'redis://redis:6379/0?encoding=utf-8'
+redis_uri = 'redis://movies-reconciliation-redis:6379/0?encoding=utf-8'
 
 # Redis prefix to use in front of all keys
 redis_key_prefix = 'openrefine_wikidata:'
