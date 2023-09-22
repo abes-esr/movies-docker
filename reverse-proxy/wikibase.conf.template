@@ -156,7 +156,7 @@ server {
     }
 
     location ^~ /reconciliation {
-        proxy_pass http://upstream upstream-movies-reconciliation:8000/;
+        proxy_pass http://upstream-movies-reconciliation:8000/;
         set $upstream_keepalive false;
     }
 	
