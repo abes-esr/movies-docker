@@ -348,7 +348,8 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-reconciliation"     
     depends_on:
-     - movies-reconciliation-redis      
+     - movies-reconciliation-redis
+     - movies-rp
       
   movies-docusaurus:
     image: abesesr/movies:${MOVIES_DOCUSAURUS_IMAGE_VERSION}-documentation
