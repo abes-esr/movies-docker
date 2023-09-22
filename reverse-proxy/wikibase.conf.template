@@ -117,6 +117,11 @@ upstream upstream-movies-wikibase-wdqs-frontend {
     #     using port: 80
     server movies-wikibase-wdqs-frontend;
 }
+# movies-test.abes.fr/reconciliation
+upstream upstream-movies-reconciliation {
+    # Container: movies-reconciliation
+    server movies-reconciliation;
+}
 server {
     server_name ${MOVIES_WIKIBASE_URL_PUBLIQUE};
     http2 on;
@@ -150,6 +155,10 @@ server {
         set $upstream_keepalive false;
     }
 
+    location ^~ /reconciliation {
+        proxy_pass http://upstream upstream-movies-reconciliation:8000/;
+        set $upstream_keepalive false;
+    }
 	
 	location ^~ /w {
         proxy_pass http://upstream-movies-wikibase;

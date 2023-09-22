@@ -326,8 +326,8 @@ services:
     restart: unless-stopped
     networks:
       - default    
-    ports:
-     - "8000:8000"
+#    ports:
+#     - "8000:8000"
     volumes:
 #     - ./reconciliation/config.py:/openrefine-wikibase/config.py
 #     - ./reconciliation/manifest.json:/openrefine-wikibase/static/manifest.json
