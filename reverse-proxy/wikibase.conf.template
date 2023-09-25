@@ -125,7 +125,7 @@ upstream upstream-movies-reconciliation {
 # movies-test.abes.fr/doc
 upstream upstream-movies-doc {
     # Container: movies-docusaurus
-    server movies-docusaurus:16080;
+    server movies-docusaurus:80;
 }
 server {
     server_name ${MOVIES_WIKIBASE_URL_PUBLIQUE};
