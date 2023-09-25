@@ -11,6 +11,7 @@ curl -b cookie.lwp -c cookie.lwp -d action=login -d lgname=$NAME -d lgpassword=$
 echo "LGTOKEN : ${LGTOKEN}"
 CSRFTOKEN=$(curl -b cookie.lwp -c cookie.lwp "${API}?action=query&meta=tokens&format=json" | jq '.query.tokens.csrftoken' -r)
 echo "CSRFTOKEN : ${CSRFTOKEN}"
+
 echo "Création des propriétés"
 while IFS="|" read -r rec_label rec_type
 do
@@ -18,6 +19,7 @@ do
    echo $PROPERTY
    curl -b cookie.lwp -c cookie.lwp -d action=wbeditentity -d new=property -d data="$PROPERTY" --data-urlencode token=$CSRFTOKEN -d format=json $API
 done < /home/data/properties.csv
+
 echo "Création des classes"
 while read rec_label
 do
@@ -25,6 +27,7 @@ ITEM='{"labels":{"fr":{"language":"fr","value":"'$rec_label'"}}}'
    echo $ITEM
    curl -b cookie.lwp -c cookie.lwp -d action=wbeditentity -d new=item -d data="$ITEM" --data-urlencode token=$CSRFTOKEN -d format=json $API
 done < /home/data/items.csv
+
 echo "Création des relations"
 while IFS="|" read -r rec_enfant rec_parent
 do
@@ -33,3 +36,10 @@ do
    echo $CLAIM
    curl -b cookie.lwp -c cookie.lwp -d action=wbeditentity -d id=$rec_enfant -d data="$CLAIM" --data-urlencode token=$CSRFTOKEN -d format=json $API
 done < /home/data/claims.csv
+
+echo "Création des tags"
+while read rec_tag
+do
+   echo $rec_tag
+   curl -b cookie.lwp -c cookie.lwp -d action=managetags -d operation=create -d tag=$rec_tag --data-urlencode token=$CSRFTOKEN -d format=json $API
+done < /home/data/tags.csv
