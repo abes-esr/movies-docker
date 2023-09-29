@@ -67,6 +67,10 @@ services:
       ## also uncomment the same line in the wikibase_jobrunner service!
       - ./wikibase/LocalSettings.php:/var/www/html/LocalSettings.d/LocalSettings.override.php
       - ./wikibase/extra-install.sh:/extra-install.sh
+      ## Accessibilité du logo dans l'environnement d'execution
+      - ./wikibase/img/wikibase_logo.png:/var/www/html/img/wikibase_logo.png
+      ## Remplacement du favicon
+      - ./wikibase/img/favicon.ico:/var/www/html/favicon.ico
     networks:
       default:
         aliases:
