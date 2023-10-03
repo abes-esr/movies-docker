@@ -322,10 +322,7 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-reconciliation-redis"      
 
   movies-reconciliation:
-    image: abesesr/movies:0.0.1-reconciliation
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
+    image: registry.gitlab.com/nfdi4culture/ta1-data-enrichment/openrefine-wikibase:1.1.0
     container_name: movies-reconciliation
     restart: unless-stopped
     networks:
@@ -337,7 +334,7 @@ services:
 #     - ./reconciliation/manifest.json:/openrefine-wikibase/static/manifest.json
      - ./reconciliation/config.sh:/openrefine-wikibase/config.sh
     environment:
-     - WIKIBASE_NAME=wikibase-docker
+     - WIKIBASE_NAME=Movies Reconciliation
      - WIKIBASE_ADDRESS=${MOVIES_WIKIBASE_URL_PUBLIQUE}
      - RECONCILE_ADDRESS=${MOVIES_WIKIBASE_SCHEME}://${MOVIES_WIKIBASE_URL_PUBLIQUE}/reconciliation
      - QUERY_ADDRESS=${MOVIES_WIKIBASE_URL_PUBLIQUE}
