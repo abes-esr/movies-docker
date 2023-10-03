@@ -334,7 +334,7 @@ services:
 #     - ./reconciliation/manifest.json:/openrefine-wikibase/static/manifest.json
      - ./reconciliation/config.sh:/openrefine-wikibase/config.sh
     environment:
-     - WIKIBASE_NAME=wikibase-docker
+     - WIKIBASE_NAME=Movies Reconciliation
      - WIKIBASE_ADDRESS=${MOVIES_WIKIBASE_URL_PUBLIQUE}
      - RECONCILE_ADDRESS=${MOVIES_WIKIBASE_SCHEME}://${MOVIES_WIKIBASE_URL_PUBLIQUE}/reconciliation
      - QUERY_ADDRESS=${MOVIES_WIKIBASE_URL_PUBLIQUE}
