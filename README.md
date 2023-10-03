@@ -46,11 +46,15 @@ cp .env-dist .env
 
 **Note : les mots de passe ne sont pas présent dans le fichier au moment de la copie. Vous devez aller les renseigner manuellement en éditant le fichier dans la console avec nano par exemple**
 
-Avant de démarrer l'application, assurez-vous que le fichier wikibase/LocalSettings.php ait les bonnes permissions. 
+Avant de démarrer l'application, assurez-vous que les fichiers suivants aient les bonnes permissions :
+  wikibase/LocalSettings.php  
+  wikibase/img/favicon.ico
+  wikibase/img/wikibase_logo.png
+  
 Pour ce faire, exécutez la commande suivante : 
 ```bash
-cd /opt/pod/movies-docker/
-chmod 644 wikibase/LocalSettings.php
+cd /opt/pod/movies-docker/wikibase
+chmod 644 LocalSettings.php /img/favicon.ico /img/wikibase_logo.png
 ```
 
 Démarrer l'application :
