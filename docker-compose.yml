@@ -395,6 +395,26 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
 
+  movies-grlc:
+    image: clariah/grlc:v1.3.8
+    container_name: movies-grlc
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
+    # ports:
+    #   - "${MOVIES_GRLC_PORT}:8088" 
+    networks:
+      - default 
+    environment:
+      GRLC_SERVER_NAME: ${MOVIES_GRLC_SERVER_NAME}
+      GRLC_GITHUB_ACCESS_TOKEN: ${MOVIES_GRLC_GITHUB_ACCESS_TOKEN}
+      GRLC_SPARQL_ENDPOINT: ${MOVIES_GRLC_SPARQL_ENDPOINT}
+    labels:
+      # pour envoyer les logs dans le puits de log de l'abes
+      - "co.elastic.logs/enabled=true"
+      - "co.elastic.logs/processors.add_fields.target="
+      - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-grlc"
 
 volumes:
   query-service-data:
