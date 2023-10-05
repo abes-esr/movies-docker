@@ -170,12 +170,8 @@ server {
         set $upstream_keepalive false;
     }
 
-    location ^~ /api {
-        proxy_pass http://upstream-movies-grlc/;
-        set $upstream_keepalive false;
-    }
-	
-	location ^~ /w {
+
+    location ^~ /w {
         proxy_pass http://upstream-movies-wikibase;
         set $upstream_keepalive false;
     }
@@ -185,7 +181,6 @@ server {
         proxy_pass http://upstream-movies-wikibase-wdqs-frontend/$1;
         set $upstream_keepalive false;
     }	
-	
 	
 	location / {
         proxy_pass http://upstream-movies-wikibase;
@@ -197,7 +192,15 @@ server {
         set $upstream_keepalive false;
     }
 	
+    location /grlc/api {
+        rewrite /grlc/api/(.*) /api-git/abes-esr/movies-api/$1 break;
+        proxy_pass http://upstream-movies-grlc/;
+    }
 
+    location ^~ /grlc {
+        proxy_pass http://upstream-movies-grlc/;
+        set $upstream_keepalive false;
+    }
 
 	
     location /proxy/wikibase {
