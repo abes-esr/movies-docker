@@ -122,6 +122,16 @@ upstream upstream-movies-reconciliation {
     # Container: movies-reconciliation
     server movies-reconciliation:8000;
 }
+# movies-test.abes.fr/doc
+upstream upstream-movies-doc {
+    # Container: movies-docusaurus
+    server movies-docusaurus;
+}
+# movies-test.abes.fr/grlc
+upstream upstream-movies-grlc {
+    # Container: movies-grlc
+    server movies-grlc:8088;
+}
 server {
     server_name ${MOVIES_WIKIBASE_URL_PUBLIQUE};
     http2 on;
@@ -159,6 +169,11 @@ server {
         proxy_pass http://upstream-movies-reconciliation/;
         set $upstream_keepalive false;
     }
+
+    location ^~ /api {
+        proxy_pass http://upstream-movies-grlc/;
+        set $upstream_keepalive false;
+    }
 	
 	location ^~ /w {
         proxy_pass http://upstream-movies-wikibase;
@@ -177,11 +192,11 @@ server {
         set $upstream_keepalive false;
     }
 
-    location /doc {
-        proxy_pass http://movies-docusaurus;
+    location ^~ /doc {
+        proxy_pass http://upstream-movies-doc/;
         set $upstream_keepalive false;
     }
-
+	
 
 
 	

@@ -67,6 +67,10 @@ services:
       ## also uncomment the same line in the wikibase_jobrunner service!
       - ./wikibase/LocalSettings.php:/var/www/html/LocalSettings.d/LocalSettings.override.php
       - ./wikibase/extra-install.sh:/extra-install.sh
+      ## Accessibilité du logo dans l'environnement d'execution
+      - ./wikibase/img/wikibase_logo.png:/var/www/html/img/wikibase_logo.png
+      ## Remplacement du favicon
+      - ./wikibase/img/favicon.ico:/var/www/html/favicon.ico
     networks:
       default:
         aliases:
@@ -318,10 +322,7 @@ services:
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-reconciliation-redis"      
 
   movies-reconciliation:
-    image: abesesr/movies:0.0.1-reconciliation
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
+    image: registry.gitlab.com/nfdi4culture/ta1-data-enrichment/openrefine-wikibase:1.1.0
     container_name: movies-reconciliation
     restart: unless-stopped
     networks:
@@ -333,7 +334,7 @@ services:
 #     - ./reconciliation/manifest.json:/openrefine-wikibase/static/manifest.json
      - ./reconciliation/config.sh:/openrefine-wikibase/config.sh
     environment:
-     - WIKIBASE_NAME=wikibase-docker
+     - WIKIBASE_NAME=Movies Reconciliation
      - WIKIBASE_ADDRESS=${MOVIES_WIKIBASE_URL_PUBLIQUE}
      - RECONCILE_ADDRESS=${MOVIES_WIKIBASE_SCHEME}://${MOVIES_WIKIBASE_URL_PUBLIQUE}/reconciliation
      - QUERY_ADDRESS=${MOVIES_WIKIBASE_URL_PUBLIQUE}
@@ -391,6 +392,26 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
 
+  movies-grlc:
+    image: clariah/grlc:v1.3.8
+    container_name: movies-grlc
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
+    # ports:
+    #   - "${MOVIES_GRLC_PORT}:8088" 
+    networks:
+      - default 
+    environment:
+      GRLC_SERVER_NAME: ${MOVIES_GRLC_SERVER_NAME}
+      GRLC_GITHUB_ACCESS_TOKEN: ${MOVIES_GRLC_GITHUB_ACCESS_TOKEN}
+      GRLC_SPARQL_ENDPOINT: ${MOVIES_GRLC_SPARQL_ENDPOINT}
+    labels:
+      # pour envoyer les logs dans le puits de log de l'abes
+      - "co.elastic.logs/enabled=true"
+      - "co.elastic.logs/processors.add_fields.target="
+      - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-grlc"
 
 volumes:
   query-service-data:
