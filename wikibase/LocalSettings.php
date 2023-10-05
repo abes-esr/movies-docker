@@ -3,6 +3,11 @@
 //Variable utilisée pour faire fonctionner l'autocompletion (mais warning dans jobrunner...)
 $wgServer = getenv('WIKIBASE_SCHEME') . "://" . getenv('WIKIBASE_URL_PUBLIQUE');
 
+$wgLogos = [
+	'1x' => "/img/wikibase_logo.png",	    // path to 1x version
+    'icon' => "/img/icon_100x100.png",			// A version of the logo without wordmark and tagline
+];
+
 // LOAD NUKE EXTENSION
 wfLoadExtension( 'Nuke' );
 
