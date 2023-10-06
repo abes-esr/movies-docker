@@ -159,6 +159,8 @@ services:
     restart: unless-stopped
     depends_on:
       - movies-wikibase-wdqs-proxy
+    volumes:
+      - ./wikibase/wdqs_front_index.html:/usr/share/nginx/html/index.html
     networks:
       default:
         aliases:
