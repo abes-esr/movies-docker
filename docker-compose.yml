@@ -257,6 +257,8 @@ services:
     environment:
       - NAME=${MOVIES_WIKIBASE_MW_ADMIN_NAME}
       - PASS=${MOVIES_WIKIBASE_MW_ADMIN_PASS}
+      - BOTNAME=${MOVIES_WIKIBASE_MW_BOT_NAME}
+      - BOTPASS=${MOVIES_WIKIBASE_MW_BOT_PASS}      
       - MOVIES_WIKIBASE_HOST=${MOVIES_WIKIBASE_HOST}
     volumes:
       - ./initializer:/home/data

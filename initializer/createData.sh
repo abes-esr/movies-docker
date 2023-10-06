@@ -3,6 +3,10 @@
 #https://www.baeldung.com/linux/csv-parsing
 NAME=$NAME
 PASS=$PASS
+
+BOTNAME=$BOTNAME
+BOTPASS=$BOTPASS
+
 API='http://'$MOVIES_WIKIBASE_HOST'/w/api.php'
 echo $API
 echo $NAME
@@ -43,3 +47,13 @@ do
    echo $rec_tag
    curl -b cookie.lwp -c cookie.lwp -d action=managetags -d operation=create -d tag=$rec_tag --data-urlencode token=$CSRFTOKEN -d format=json $API
 done < /home/data/tags.csv
+
+echo "Création du compte Bot ${BOTNAME}"
+CREATETOKEN=$(curl -b cookie.lwp -c cookie.lwp "${API}?action=query&meta=tokens&type=createaccount&format=json" | jq '.query.tokens.createaccounttoken' -r)
+echo "CREATETOKEN : ${CREATETOKEN}"
+curl -b cookie.lwp -c cookie.lwp -d action=createaccount -d username=$BOTNAME -d password=$BOTPASS -d retype=$BOTPASS -d createreturnurl=$API --data-urlencode createtoken=$CREATETOKEN -d format=json $API
+
+echo "Ajout du compte ${BOTNAME}, dans le groupe Bot"
+USERRIGHTSTOKEN=$(curl -b cookie.lwp -c cookie.lwp "${API}?action=query&meta=tokens&type=userrights&format=json" | jq '.query.tokens.userrightstoken' -r)
+echo "USERRIGHTSTOKEN : ${USERRIGHTSTOKEN}"
+curl -b cookie.lwp -c cookie.lwp -d action=userrights -d user=$BOTNAME -d add=bot --data-urlencode token=$USERRIGHTSTOKEN -d format=json $API
