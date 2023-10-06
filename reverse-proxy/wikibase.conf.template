@@ -1,4 +1,5 @@
 # configuration file /etc/nginx/conf.d/wikibase.conf
+# #
 
 # If we receive X-Forwarded-Proto, pass it through; otherwise, pass along the
 # scheme used to connect to this server
@@ -158,7 +159,7 @@ server {
         proxy_pass http://upstream-movies-wikibase-wdqs-frontend/js/;
         set $upstream_keepalive false;
     }
-	
+
 	
     location ^~ /sparql {
         proxy_pass http://upstream-movies-wikibase-wdqs-frontend/;
@@ -194,6 +195,11 @@ server {
 	
     location /grlc/api {
         rewrite /grlc/api/(.*) /api-git/abes-esr/movies-api/$1 break;
+        proxy_pass http://upstream-movies-grlc/;
+    }
+
+    location /static {
+        rewrite /static/(.*) /static/$1 break;
         proxy_pass http://upstream-movies-grlc/;
     }
 
