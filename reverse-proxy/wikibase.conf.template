@@ -203,6 +203,11 @@ server {
         proxy_pass http://upstream-movies-grlc/;
     }
 
+   location /api-git {
+        rewrite /api-git/(.*) /api-git/$1 break;
+        proxy_pass http://upstream-movies-grlc/;
+    }
+
     location ^~ /grlc {
         proxy_pass http://upstream-movies-grlc/;
         set $upstream_keepalive false;
