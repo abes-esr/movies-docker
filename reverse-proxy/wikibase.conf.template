@@ -193,8 +193,8 @@ server {
         set $upstream_keepalive false;
     }
 	
-    location /grlc/api {
-        rewrite /grlc/api/(.*) /api-git/abes-esr/movies-api/$1 break;
+    location /api {
+        rewrite /api/(.*) /api-git/abes-esr/movies-api/$1 break;
         proxy_pass http://upstream-movies-grlc/;
     }
 
@@ -208,12 +208,6 @@ server {
         proxy_pass http://upstream-movies-grlc/;
     }
 
-    location ^~ /grlc {
-        proxy_pass http://upstream-movies-grlc/;
-        set $upstream_keepalive false;
-    }
-
-	
     location /proxy/wikibase {
         rewrite /proxy/wikibase/(.*) /$1 break;
         proxy_pass http://upstream-movies-wikibase;
