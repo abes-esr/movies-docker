@@ -23,6 +23,7 @@ wfLoadExtension( 'LDAPGroups' );
 $wgGroupPermissions['*']['edit'] = false;
 $wgGroupPermissions['user']['edit'] = false;
 $wgGroupPermissions['sysop']['edit'] = true;
+$wgGroupPermissions['bot']['edit'] = true;
 
 $wgGroupPermissions['*']['createaccount'] = false;
 $wgGroupPermissions['*']['autocreateaccount'] = true;
