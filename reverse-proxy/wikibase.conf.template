@@ -210,8 +210,12 @@ server {
         proxy_pass http://movies-wikibase-wdqs-proxy.svc;
     }
 
-    location /entity/statement {
+    location /entity/statement/Q {
         rewrite /entity/statement/(Q\d+)\-(.*) /wiki/Item:$1#$1$dollar$2 redirect;
+    }
+
+    location /entity/statement/P {
+        rewrite /entity/statement/(P\d+)\-(.*) /wiki/Property:$1#$1$dollar$2 redirect;
     }
 
     location /prop {
