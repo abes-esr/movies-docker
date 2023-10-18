@@ -133,6 +133,10 @@ upstream upstream-movies-grlc {
     # Container: movies-grlc
     server movies-grlc:8088;
 }
+
+geo $dollar {
+    default "$";
+}
 server {
     server_name ${MOVIES_WIKIBASE_URL_PUBLIQUE};
     http2 on;
@@ -149,22 +153,8 @@ server {
         return 444;
     }
 
-	
-	location /css {
-        proxy_pass http://upstream-movies-wikibase-wdqs-frontend/css/;
-        set $upstream_keepalive false;
-    }
-	
-	location /js {
-        proxy_pass http://upstream-movies-wikibase-wdqs-frontend/js/;
-        set $upstream_keepalive false;
-    }
 
-	
-    location ^~ /sparql {
-        proxy_pass http://upstream-movies-wikibase-wdqs-frontend/;
-        set $upstream_keepalive false;
-    }
+    #OpenRefine Wikibase :
 
     location ^~ /reconciliation {
         proxy_pass http://upstream-movies-reconciliation/;
@@ -172,27 +162,16 @@ server {
     }
 
 
-    location ^~ /w {
-        proxy_pass http://upstream-movies-wikibase;
-        set $upstream_keepalive false;
-    }
-	
-	
-	location ~ /(.+\.json|.+\.svg)$ {
-        proxy_pass http://upstream-movies-wikibase-wdqs-frontend/$1;
-        set $upstream_keepalive false;
-    }	
-	
-	location / {
-        proxy_pass http://upstream-movies-wikibase;
-        set $upstream_keepalive false;
-    }
+    #Docusaurus :
 
     location ^~ /doc {
         proxy_pass http://upstream-movies-doc/;
         set $upstream_keepalive false;
     }
-	
+
+
+    #GRLC :
+
     location /api {
         rewrite /api/(.*) /api-git/abes-esr/movies-api/$1 break;
         proxy_pass http://upstream-movies-grlc/;
@@ -208,14 +187,58 @@ server {
         proxy_pass http://upstream-movies-grlc/;
     }
 
-    location /proxy/wikibase {
-        rewrite /proxy/wikibase/(.*) /$1 break;
-        proxy_pass http://upstream-movies-wikibase;
+
+    #WDQS :
+
+    location /css {
+        proxy_pass http://upstream-movies-wikibase-wdqs-frontend/css/;
+        set $upstream_keepalive false;
+    }
+
+	location /js {
+        proxy_pass http://upstream-movies-wikibase-wdqs-frontend/js/;
+        set $upstream_keepalive false;
+    }
+
+    location ^~ /sparql {
+        proxy_pass http://upstream-movies-wikibase-wdqs-frontend/;
+        set $upstream_keepalive false;
     }
 
     location /proxy/wdqs {
         rewrite /proxy/wdqs/(.*) /$1 break;
         proxy_pass http://movies-wikibase-wdqs-proxy.svc;
+    }
+
+    location /entity/statement {
+        rewrite /entity/statement/(Q\d+)\-(.*) /wiki/Item:$1#$1$dollar$2 redirect;
+    }
+
+    location /prop {
+        rewrite /prop(/direct|/statement|/statement|/reference|/qualifier|/novalue)?(/value)?/(.*) /wiki/Property:$3 redirect;
+    }
+
+
+    #Wikibase :
+
+    location ^~ /w {
+        proxy_pass http://upstream-movies-wikibase;
+        set $upstream_keepalive false;
+    }
+
+    location ~ /(.+\.json|.+\.svg)$ {
+        proxy_pass http://upstream-movies-wikibase-wdqs-frontend/$1;
+        set $upstream_keepalive false;
+    }
+
+    location /proxy/wikibase {
+        rewrite /proxy/wikibase/(.*) /$1 break;
+        proxy_pass http://upstream-movies-wikibase;
+    }
+
+    location / {
+            proxy_pass http://upstream-movies-wikibase;
+            set $upstream_keepalive false;
     }
 
 }
