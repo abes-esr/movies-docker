@@ -215,7 +215,7 @@ server {
     }
 
     location /prop {
-        rewrite /prop(/direct|/statement|/statement|/reference|/qualifier|/novalue/direct-normalized)?(/value|/value-normalized)?/(.*) /wiki/Property:$3 redirect;
+        rewrite /prop(/direct|/statement|/statement|/reference|/qualifier|/novalue|/direct-normalized)?(/value|/value-normalized)?/(.*) /wiki/Property:$3 redirect;
     }
 
 
