@@ -399,6 +399,7 @@ services:
   movies-grlc:
     image: clariah/grlc:v1.3.8
     container_name: movies-grlc
+    restart: unless-stopped
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -416,6 +417,27 @@ services:
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-grlc"
+
+  movies-copy-backup:
+    image: abesesr/movies:develop-copy-backup
+    container_name: movies-copy-backup
+    profiles: ["test"]
+    restart: unless-stopped
+    mem_limit: ${MOVIES_MEM_LIMIT}
+    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
+    cpus: ${MOVIES_CPU_LIMIT}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - default
+    labels:
+      # pour envoyer les logs dans le puits de log de l'abes
+      - "co.elastic.logs/enabled=true"
+      - "co.elastic.logs/processors.add_fields.target="
+      - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
+      - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-copy-backup"
+      # pour que les mises à jour de cette image soient auto-déployées par watchtower
+      - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
 
 volumes:
   query-service-data:
