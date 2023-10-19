@@ -56,4 +56,4 @@ curl -b cookie.lwp -c cookie.lwp -d action=createaccount -d username=$BOTNAME -d
 echo "Ajout du compte ${BOTNAME}, dans le groupe Bot"
 USERRIGHTSTOKEN=$(curl -b cookie.lwp -c cookie.lwp "${API}?action=query&meta=tokens&type=userrights&format=json" | jq '.query.tokens.userrightstoken' -r)
 echo "USERRIGHTSTOKEN : ${USERRIGHTSTOKEN}"
-curl -b cookie.lwp -c cookie.lwp -d action=userrights -d user=$BOTNAME -d add=bot --data-urlencode token=$USERRIGHTSTOKEN -d format=json $API
+curl -b cookie.lwp -c cookie.lwp -d action=userrights -d user=$BOTNAME -d add=bots --data-urlencode token=$USERRIGHTSTOKEN -d format=json $API
