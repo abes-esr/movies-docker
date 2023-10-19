@@ -266,7 +266,7 @@ services:
       - ./initializer:/home/data
     command: /bin/sh -c "sh /home/data/createData.sh"
     networks:
-      default:
+      - default
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -298,7 +298,7 @@ services:
       SPLIT_DB: "FALSE"
       DEBUG_MODE: "FALSE"
     networks:
-      default:
+      - default
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -360,6 +360,8 @@ services:
     image: abesesr/movies:${MOVIES_DOCUSAURUS_IMAGE_VERSION}-documentation
     container_name: movies-docusaurus
     restart: unless-stopped
+    networks:
+      - default
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -380,6 +382,8 @@ services:
     image: containrrr/watchtower:1.4.0
     container_name: movies-watchtower
     restart: unless-stopped
+    networks:
+      - default
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
@@ -427,7 +431,7 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:rw
     networks:
       - default
     labels:
