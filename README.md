@@ -62,6 +62,9 @@ Démarrer l'application :
 ```bash
 cd /opt/pod/movies-docker/
 docker-compose up -d
+
+# en test, utiliser le profile test qui permet de synchroniser une fois par mois les données de prod vers le test : 
+docker compose --profile test up -d
 ```
 
 ## Démarrage et arrêt
@@ -71,6 +74,9 @@ docker-compose up -d
 # faites dans /opt/pod/movies-docker/.env)
 cd /opt/pod/movies-docker/
 docker-compose up -d
+
+# en test, utiliser le profile test qui permet de synchroniser une fois par mois les données de prod vers le test : 
+docker compose --profile test up -d
 ```
 
 Remarque : retirer le ``-d`` pour voir passer les logs dans le terminal et utiliser alors CTRL+C pour stopper l'application
