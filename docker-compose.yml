@@ -189,9 +189,11 @@ services:
         aliases:
          - movies-wikibase-wdqs.svc
     environment:
-      - WIKIBASE_HOST=${MOVIES_WIKIBASE_HOST}
+      - WIKIBASE_HOST=${MOVIES_WIKIBASE_URL_PUBLIQUE}
       - WDQS_HOST=movies-wikibase-wdqs.svc
       - WDQS_PORT=9999
+      # CONFIG - WIKIBASE_SCHEME can be set to 'https' if the updater should expect https concept uris
+      - WIKIBASE_SCHEME=${MOVIES_WIKIBASE_SCHEME}
     expose:
       - 9999
     mem_limit: ${MOVIES_MEM_LIMIT}
