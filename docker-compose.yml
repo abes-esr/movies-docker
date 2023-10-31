@@ -62,7 +62,7 @@ services:
     restart: unless-stopped
     volumes:
       ## This shares the configuration with jobrunner
-      - shared:/var/www/html/:rw
+      - ./volumes/shared:/var/www/html/:rw
       ## Uncomment this next line to mount your own LocalSettings.php file
       ## also uncomment the same line in the wikibase_jobrunner service!
       - ./wikibase/LocalSettings.php:/var/www/html/LocalSettings.d/LocalSettings.override.php
@@ -104,7 +104,7 @@ services:
       - movies-wikibase-mysql
     restart: unless-stopped
     volumes:
-      - shared:/shared/:ro
+      - ./volumes/shared:/shared/:ro
       - ./wikibase/jobrunner-entrypoint.sh:/jobrunner-entrypoint.sh
       ## Uncomment this next line to mount your own LocalSettings.php file
       ## also uncomment the same line in the wikibase service
@@ -132,7 +132,7 @@ services:
     container_name: movies-wikibase-mysql
     restart: unless-stopped
     volumes:
-      - mediawiki-mysql-data:/var/lib/mysql
+      - ./volumes/mediawiki-mysql-data:/var/lib/mysql
     environment:
       # CONFIG - Change the default values below (should match values passed to wikibase)
       MYSQL_DATABASE: ${MOVIES_WIKIBASE_DB_NAME}
@@ -183,7 +183,7 @@ services:
     restart: unless-stopped
     command: /runBlazegraph.sh
     volumes:
-      - query-service-data:/wdqs/data
+      - ./volumes/query-service-data:/wdqs/data
     networks:
       default:
         aliases:
@@ -446,9 +446,6 @@ services:
       - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
 
 volumes:
-  query-service-data:
-  shared:
-  mediawiki-mysql-data:
   conf:
   certs:
   vhost.d:
