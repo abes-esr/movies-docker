@@ -62,7 +62,7 @@ services:
     restart: unless-stopped
     volumes:
       ## This shares the configuration with jobrunner
-      - ./volumes/shared:/var/www/html/:rw
+      - shared:/var/www/html/:rw
       ## Uncomment this next line to mount your own LocalSettings.php file
       ## also uncomment the same line in the wikibase_jobrunner service!
       - ./wikibase/LocalSettings.php:/var/www/html/LocalSettings.d/LocalSettings.override.php
@@ -104,7 +104,7 @@ services:
       - movies-wikibase-mysql
     restart: unless-stopped
     volumes:
-      - ./volumes/shared:/shared/:ro
+      - shared:/shared/:ro
       - ./wikibase/jobrunner-entrypoint.sh:/jobrunner-entrypoint.sh
       ## Uncomment this next line to mount your own LocalSettings.php file
       ## also uncomment the same line in the wikibase service
@@ -446,6 +446,7 @@ services:
       - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
 
 volumes:
+  shared:
   conf:
   certs:
   vhost.d:
