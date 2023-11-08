@@ -13,7 +13,7 @@ echo "
     \"wikibase\": {
       \"site_iri\": \"https://${WIKIBASE_ADDRESS}/entity/\",
       \"maxlag\": 5,
-      \"max_edits_per_minute\": 60,
+      \"max_edits_per_minute\": 1,
       \"tag\": \"openrefine-\${version}\",
       \"properties\": {
         \"instance_of\": \"P1\",
