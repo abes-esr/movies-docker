@@ -6,7 +6,7 @@ fin|time
 habilitation doctorale|wikibase-item
 siren|external-id
 siret|external-id
-identifiant_contrat|string
+identifiant contrat|string
 création|time
 suppression|time
 début application|time
@@ -56,3 +56,17 @@ type appartenance|string
 test|string
 forme juridique|string
 durée|quantity
+identifiant eter|string
+identifiant pic|string
+identifiant ror|string
+identifiant grid|string
+identifiant ed|string
+identifiant cnrs|string
+identifiant cti|string
+identifiant pia|string
+identifiant rcr|string
+identifiant isil|string
+identifiant orgref|string
+identifiant isni|string
+identifiant funding data|string
+identifiant viaf|string
