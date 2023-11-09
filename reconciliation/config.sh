@@ -112,7 +112,7 @@ avoid_items_of_class = None
 
 # Service name exposed at various places,
 # mainly in the list of reconciliation services of users
-service_name = 'Reconcile for ${WIKIBASE_NAME}.'
+service_name = 'Reconcile for ${WIKIBASE_NAME} (${WIKIBASE_ADDRESS})'
 
 # URL (without the trailing slash) where this server runs
 this_host = '${RECONCILE_ADDRESS}'
