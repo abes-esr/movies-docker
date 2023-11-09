@@ -5,7 +5,7 @@ echo "
 {
     \"version\": \"2.0\",
     \"mediawiki\": {
-      \"name\": \"${WIKIBASE_NAME}\",
+      \"name\": \"${WIKIBASE_NAME} (${WIKIBASE_ADDRESS})\",
       \"root\": \"https://${WIKIBASE_ADDRESS}/wiki/\",
       \"main_page\": \"https://${WIKIBASE_ADDRESS}/wiki/Main_Page\",
       \"api\": \"https://${WIKIBASE_ADDRESS}/w/api.php\"
@@ -172,7 +172,7 @@ image_properties = [
 image_download_pattern = 'https://upload.wikimedia.org/wikipedia/commons/thumb/%s/%s/%s/%dpx-%s'
 
 # Fallback URL of the image to use when previewing an item with no image
-fallback_image_url = this_host + '/static/wikibase.png'
+fallback_image_url = 'https://${WIKIBASE_ADDRESS}/img/wikibase_logo.png'
 
 # Alt text of the fallback image
 fallback_image_alt = 'Wikidata'
@@ -180,7 +180,7 @@ fallback_image_alt = 'Wikidata'
 # Autodescribe endpoint to use.
 # this is used to generate automatic descriptions from item contents.
 # (disable this with: autodescribe_endpoint = None )
-autodescribe_endpoint = 'https://tools.wmflabs.org/autodesc/'
+autodescribe_endpoint = None
 
 # Property proposal settings
 
