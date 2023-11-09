@@ -36,7 +36,7 @@ identifiant idref|external-id
 identifiant paysage|external-id
 sigle|string
 identifiant scanr|external-id
-uri|Url
+uri|url
 nom|string
 a pour successeur|wikibase-item
 a pour prédécesseur|wikibase-item
