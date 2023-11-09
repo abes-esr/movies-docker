@@ -54,13 +54,15 @@ Avant de démarrer l'application, assurez-vous que les fichiers suivants aient l
   
 Pour ce faire, exécutez la commande suivante : 
 ```bash
-cd /opt/pod/movies-docker/wikibase
-chmod 644 LocalSettings.php /img/favicon.ico /img/wikibase_logo.png
+cd /opt/pod/movies-docker/
+chmod 777 -R wikibase
+chmod 644 wikibase/LocalSettings.php
 ```
 
 Démarrer l'application :
 ```bash
 cd /opt/pod/movies-docker/
+
 docker-compose up -d
 
 # en test, utiliser le profile test qui permet de synchroniser une fois par mois les données de prod vers le test : 
@@ -73,6 +75,7 @@ docker compose --profile test up -d
 # pour démarrer l'application (ou pour appliquer des modifications 
 # faites dans /opt/pod/movies-docker/.env)
 cd /opt/pod/movies-docker/
+
 docker-compose up -d
 
 # en test, utiliser le profile test qui permet de synchroniser une fois par mois les données de prod vers le test : 
@@ -82,14 +85,30 @@ docker compose --profile test up -d
 Remarque : retirer le ``-d`` pour voir passer les logs dans le terminal et utiliser alors CTRL+C pour stopper l'application
 
 ```bash
-# pour stopper l'application
 cd /opt/pod/movies-docker/
+
+# pour stopper l'application
 docker-compose stop
 
 
 # pour redémarrer l'application
-cd /opt/pod/movies-docker/
 docker-compose restart
+
+
+# pour supprimer les données :
+
+docker-compose down -v 
+
+#en test, utiliser le profile test, sinon le conteneur movies-copy-backup ne sera pas supprimé :
+
+docker compose --profile test down -v
+
+#Et supprimer les volumes (si ok pour les droits), sinon faire un mv : 
+rm -fr volumes
+
+#ou (si pas les droits) :
+mv volumes volumesASUPPRIMER
+
 ```
 
 # pour injecter les propriétés et classes dans un wikibase vide : 
@@ -212,3 +231,4 @@ Les codes de source de movies sont ici :
 - https://github.com/abes-esr/movies-api : requêtes SPARQL pour Grlc
 - https://github.com/abes-esr/movies-wikibase : conteneur wikibase avec plugin LDAP
 - https://github.com/abes-esr/movies-documentation : documentation Docusaurus
+- https://github.com/abes-esr/movies-copy-backup : conteneur qui synchronise les données d'un env de prod vers un autre env (test par exemple)
