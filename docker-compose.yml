@@ -409,13 +409,13 @@ services:
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
     # ports:
-    #   - "${MOVIES_GRLC_PORT}:8088" 
+    #   - "${MOVIES_GRLC_PORT}:8088"
     networks:
-      - default 
+      - default
     environment:
       GRLC_SERVER_NAME: ${MOVIES_GRLC_SERVER_NAME}
       GRLC_GITHUB_ACCESS_TOKEN: ${MOVIES_GRLC_GITHUB_ACCESS_TOKEN}
-      GRLC_SPARQL_ENDPOINT: ${MOVIES_GRLC_SPARQL_ENDPOINT}
+      GRLC_SPARQL_ENDPOINT: ${MOVIES_WIKIBASE_SCHEME}://${MOVIES_WIKIBASE_URL_PUBLIQUE}${MOVIES_GRLC_SPARQL_ENDPOINT}
     labels:
       # pour envoyer les logs dans le puits de log de l'abes
       - "co.elastic.logs/enabled=true"

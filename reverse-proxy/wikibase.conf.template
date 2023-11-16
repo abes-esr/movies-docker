@@ -230,7 +230,8 @@ server {
         set $upstream_keepalive false;
     }
 
-    location ~ /(.+\.json|.+\.svg)$ {
+    #Suppression de .+\.json| pour les requêtes Grlc terminant par .json
+    location ~ /(.+\.svg)$ {
         proxy_pass http://upstream-movies-wikibase-wdqs-frontend/$1;
         set $upstream_keepalive false;
     }
