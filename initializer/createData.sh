@@ -32,7 +32,20 @@ ITEM='{"labels":{"fr":{"language":"fr","value":"'$rec_label'"}}}'
    curl -b cookie.lwp -c cookie.lwp -d action=wbeditentity -d new=item -d data="$ITEM" --data-urlencode token=$CSRFTOKEN -d format=json $API
 done < /home/data/items.csv
 
-echo "Création des relations"
+echo "Ajout de la relation, pour tous les items : 'instance de' 'Ontologie Movies' "
+i=1
+while read rec_label
+do
+   #P1 est la propriété "instance de"
+   #Q45 est 'Ontologie Movies'
+   itemId='Q'$i
+   CLAIM='{"claims":[{"mainsnak":{"snaktype":"value","property":"P1","datavalue":{"value":{"id": "Q45"},"type":"wikibase-entityid"}},"type":"statement","rank":"normal"}]}'
+   echo $CLAIM
+   curl -b cookie.lwp -c cookie.lwp -d action=wbeditentity -d id=$itemId -d data="$CLAIM" --data-urlencode token=$CSRFTOKEN -d format=json $API
+   i=$(( $i + 1 ))
+done < /home/data/items.csv
+
+echo "Création de la relation : 'rec_enfant' 'sous classe de' 'rec_parent' "
 while IFS="|" read -r rec_enfant rec_parent
 do
    #P2 est la propriété "sous classe de"
