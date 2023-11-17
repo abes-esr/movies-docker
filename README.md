@@ -164,10 +164,10 @@ Le fait de passer ``MOVIES_WATCHTOWER_RUN_ONCE`` à false va faire en sorte d'ex
 
 Les éléments suivants sont à sauvegarder:
 - ``/opt/pod/movies-docker/.env`` : contient la configuration spécifique de notre déploiement
-- ``/docker-backup/movies/`` : contient les dumps quotidiens de la base de données maria-db de movies
+- ``/opt/pod/movies-docker/movies_data`` : contient les dumps quotidiens de la base de données maria-db de movies
 
 Ces chemins sont à exclure des sauvegardes :
-  - ``/opt/pod/movies-docker/volumes/mediawiki-mysql-data/`` : car il contient les données binaires du mysql du wikibase de MOVIES
+  - ``/opt/pod/movies-docker/volumes/`` : car il contient les données binaires du mysql et du triple store, du wikibase de MOVIES
 
 ### Restauration depuis une sauvegarde
 
@@ -205,13 +205,6 @@ docker-compose up -d
 ```
 
 ## Développements
-
-### Admin de mariaDB
-Pour consulter l'interface d'admin web de mariaDB (basée sur [Adminer](https://www.adminer.org/)) rendez vous sur cette URL : 
-- local : http://127.0.0.1:11082/
-- test : http://diplotaxis5-test.v202.abes.fr:11082/
-- prod : http://diplotaxis5-prod.v102.abes.fr:11082/
-
 
 ### Mise à jour de la dernière version
 
