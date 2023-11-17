@@ -166,6 +166,9 @@ Les éléments suivants sont à sauvegarder:
 - ``/opt/pod/movies-docker/.env`` : contient la configuration spécifique de notre déploiement
 - ``/docker-backup/movies/`` : contient les dumps quotidiens de la base de données maria-db de movies
 
+Ces chemins sont à exclure des sauvegardes :
+  - ``/opt/pod/movies-docker/volumes/mediawiki-mysql-data/`` : car il contient les données binaires du mysql du wikibase de MOVIES
+
 ### Restauration depuis une sauvegarde
 
 Réinstallez l'application movies depuis la [procédure d'installation ci-dessus](#installation) et récupéré depuis les sauvegardes le fichier ``.env`` et placez le dans ``/opt/pod/movies-docker/.env`` sur la machine qui doit faire repartir movies.
