@@ -39,7 +39,7 @@ $LDAPProviderDomainConfigProvider = function() {
                 'port' => getenv('LDAP_PORT'),
                 'user' => getenv('LDAP_USER'),
                 'pass' => getenv('LDAP_PASS'),
-                'enctype' => 'clear',
+                'enctype' => 'ssl',
                 'options' => [
                     'LDAP_OPT_DEREF' => 1
                 ],
