@@ -70,6 +70,8 @@ services:
       - ./wikibase/img/wikibase_logo.png:/var/www/html/img/wikibase_logo.png
       ## Remplacement du favicon
       - ./wikibase/img/favicon.ico:/var/www/html/favicon.ico
+      ## Pour la connexion au LDAP en LDAPS
+      - ./wikibase/ldap.conf:/etc/ldap/ldap.conf
     networks:
       default:
         aliases:
