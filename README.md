@@ -174,7 +174,7 @@ Ces chemins sont à exclure des sauvegardes :
 Réinstallez l'application movies depuis la [procédure d'installation ci-dessus](#installation) et récupéré depuis les sauvegardes le fichier ``.env`` et placez le dans ``/opt/pod/movies-docker/.env`` sur la machine qui doit faire repartir movies.
 
 Restaurez ensuite le dernier dump de la base de données postgresql de movies :
-- récupérer le dernier dump généré par ``movies-db-dumper`` depuis le système de sauvegarde (le fichier dump ressemble à ceci ``mysql_all_movies-wikibase-mysql_20230914-235900.sql.gz``) et placez le fichier dump récupéré (sans le décompresser) dans ``/docker-backup/movies/`` sur la machine qui doit faire repartir movies  
+- récupérer le dernier dump généré par ``movies-db-dumper`` depuis le système de sauvegarde (le fichier dump ressemble à ceci ``mysql_all_movies-wikibase-mysql_20230914-235900.sql.gz``) et placez le fichier dump récupéré (sans le décompresser) dans ``/opt/pod/movies-docker/movies_data/(test|prod)/`` sur la machine qui doit faire repartir movies  
 
 2 possiblités :  
 
