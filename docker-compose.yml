@@ -279,7 +279,8 @@ services:
     container_name: movies-db-dumper
     restart: unless-stopped
     volumes:
-        - ${MOVIES_DB_DUMP_WORKDIR}:/backup/${MOVIES_DB_DUMP_ENV}/
+        - ${MOVIES_DB_DUMP_RACINE}:/backup_racine
+        - ${MOVIES_DB_DUMP_WORKDIR}:/backup
     depends_on:
         - movies-wikibase-mysql
     environment:
