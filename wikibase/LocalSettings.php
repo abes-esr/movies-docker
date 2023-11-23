@@ -8,6 +8,8 @@ $wgLogos = [
     'icon' => "/img/icon_100x100.png",			// A version of the logo without wordmark and tagline
 ];
 
+$wgSitename = "Wikibase Movies";
+
 // LOAD NUKE EXTENSION
 wfLoadExtension( 'Nuke' );
 
