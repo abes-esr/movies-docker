@@ -371,8 +371,8 @@ services:
     cpus: ${MOVIES_CPU_LIMIT}
     environment:
       HTTP_BASEURL: ${MOVIES_WIKIBASE_URL_PUBLIQUE}/doc
-    ports:
-      - ${MOVIES_DOCUSAURUS_HTTP_PORT}:80
+    #ports:
+    #  - ${MOVIES_DOCUSAURUS_HTTP_PORT}:80
     labels:
       # pour envoyer les logs dans le puits de log de l'abes
       - "co.elastic.logs/enabled=true"
