@@ -173,7 +173,7 @@ server {
     #GRLC :
 
     location /api {
-        rewrite /api/(.*) /api-git/abes-esr/movies-api/$1 break;
+        rewrite /api/(.*) /api-git/abes-esr/movies-api/subdir/$1 break;
         proxy_pass http://upstream-movies-grlc/;
     }
 
