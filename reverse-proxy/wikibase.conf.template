@@ -197,7 +197,7 @@ server {
         set $upstream_keepalive false;
     }
 
-	location /js {
+    location /js {
         proxy_pass http://upstream-movies-wikibase-wdqs-frontend/js/;
         set $upstream_keepalive false;
     }
