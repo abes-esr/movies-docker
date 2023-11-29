@@ -172,7 +172,7 @@ server {
 
     #GRLC :
 
-    rewrite ^/api$ /api/v1 redirect;
+    rewrite ^/api(/)?$ /api/v1 redirect;
 
     location /api {
         rewrite /api/(.*) /api-git/abes-esr/movies-api/subdir/$1 break;
@@ -201,6 +201,8 @@ server {
         proxy_pass http://upstream-movies-wikibase-wdqs-frontend/js/;
         set $upstream_keepalive false;
     }
+
+    rewrite ^/sparql$ /sparql/# redirect;
 
     location ^~ /sparql {
         proxy_pass http://upstream-movies-wikibase-wdqs-frontend/;
