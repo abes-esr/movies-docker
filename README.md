@@ -98,7 +98,7 @@ docker-compose restart
 
 docker-compose down -v 
 
-#en test, utiliser le profile test, sinon le conteneur movies-copy-backup ne sera pas supprimé :
+#en test, utiliser le profile test, sinon le conteneur ``movies-copy-backup`` ne sera pas supprimé :
 
 docker compose --profile test down -v
 
@@ -166,7 +166,7 @@ Les éléments suivants sont à sauvegarder:
 - ``/opt/pod/movies-docker/movies_data`` : contient les dumps quotidiens de la base de données maria-db de movies
 
 /!\ A noter : le répertoire ``/opt/pod/movies-docker/movies_data`` est un montage NFS entre la machine de test et celle de production.  
-Il permet une synchronisation, par le conteneur movies-copy-backup, des données de production vers l'environnement de test, à interval régulier.
+Il permet une synchronisation, par le conteneur ``movies-copy-backup``, des données de production vers l'environnement de test, à interval régulier.
 
 
 Ces chemins sont à exclure des sauvegardes :
