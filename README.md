@@ -165,6 +165,10 @@ Les éléments suivants sont à sauvegarder:
 - ``/opt/pod/movies-docker/.env`` : contient la configuration spécifique de notre déploiement
 - ``/opt/pod/movies-docker/movies_data`` : contient les dumps quotidiens de la base de données maria-db de movies
 
+/!\ A noter : le répertoire ``/opt/pod/movies-docker/movies_data`` est un montage NFS entre la machine de test et celle de production.  
+Il permet une synchronisation, par le conteneur movies-copy-backup, des données de production vers l'environnement de test, à interval régulier.
+
+
 Ces chemins sont à exclure des sauvegardes :
   - ``/opt/pod/movies-docker/volumes/`` : car il contient les données binaires du mysql et du triple store, du wikibase de MOVIES
 
