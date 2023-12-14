@@ -133,6 +133,12 @@ Cela va afficher les 100 dernière lignes de logs générées par l'application 
 
 Pour configurer l'application, vous devez créer et personnaliser un fichier ``/opt/pod/movies-docker/.env`` (cf section [Installation](#installation)). Les paramètres à placer dans ce fichier ``.env`` sont indiqués dans le fichier [``.env-dist``](https://github.com/abes-esr/movies-docker/blob/develop/.env-dist)
 
+### Modifier les comptes LDAP autorisés à se connecter au Wikibase Movies
+
+Pour ajouter, modifier, supprimer des comptes LDAP autorités à se connecter au Wikibase Movies, il faut modifier la variable d'environnement (présente dans le fichier .env) : ``MOVIES_WIKIBASE_LDAP_MAILS``
+
+Il faut ensuite utiliser la commande suivante pour recharger les variables d'environnement du conteneur Wikibase Movies : ``docker compose up -d movies-wikibase``
+
 ### Allocation de ressources pour les conteneurs
 
 Pour ajuster l'allocation de ressources pour les conteneurs (par exemple, mémoire, CPU), vous pouvez définir la valeur des variables d'environnement suivantes dans votre fichier ``.env`` :
