@@ -36,23 +36,14 @@ echo "Ajout de la relation, pour tous les items : 'instance de' 'Ontologie Movie
 i=1
 while read rec_label
 do
-   #P1 est la propriété "instance de"
-   #Q45 est 'Ontologie Movies'
+   #P47 est la propriété "instance de"
+   #Q53 est 'Ontologie Movies'
    itemId='Q'$i
-   CLAIM='{"claims":[{"mainsnak":{"snaktype":"value","property":"P1","datavalue":{"value":{"id": "Q45"},"type":"wikibase-entityid"}},"type":"statement","rank":"normal"}]}'
+   CLAIM='{"claims":[{"mainsnak":{"snaktype":"value","property":"P47","datavalue":{"value":{"id": "Q53"},"type":"wikibase-entityid"}},"type":"statement","rank":"normal"}]}'
    echo $CLAIM
    curl -b cookie.lwp -c cookie.lwp -d action=wbeditentity -d id=$itemId -d data="$CLAIM" --data-urlencode token=$CSRFTOKEN -d format=json $API
    i=$(( $i + 1 ))
 done < /home/data/items.csv
-
-echo "Création de la relation : 'rec_enfant' 'sous classe de' 'rec_parent' "
-while IFS="|" read -r rec_enfant rec_parent
-do
-   #P2 est la propriété "sous classe de"
-   CLAIM='{"claims":[{"mainsnak":{"snaktype":"value","property":"P2","datavalue":{"value":{"id": "'$rec_parent'"},"type":"wikibase-entityid"}},"type":"statement","rank":"normal"}]}'  
-   echo $CLAIM
-   curl -b cookie.lwp -c cookie.lwp -d action=wbeditentity -d id=$rec_enfant -d data="$CLAIM" --data-urlencode token=$CSRFTOKEN -d format=json $API
-done < /home/data/claims.csv
 
 echo "Création des tags"
 while read rec_tag
