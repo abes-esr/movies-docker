@@ -1,72 +1,56 @@
-instance de|wikibase-item
-sous classe de|wikibase-item
-code établissement|string
-début|time
-fin|time
-habilitation doctorale|wikibase-item
-siren|external-id
-siret|external-id
-identifiant contrat|string
-création|time
-suppression|time
-début application|time
-fin application|time
 a pour bénéficiaire|wikibase-item
-est bénéficiaire|wikibase-item
-a pour signataire|wikibase-item
-est signataire|wikibase-item
-a pour membre associé|wikibase-item
-est membre associé|wikibase-item
-a pour membre constitutif|wikibase-item
-est membre constitutif|wikibase-item
-scission|wikibase-item
-remplace|wikibase-item
-succession|wikibase-item
-inclusion|wikibase-item
-relations|wikibase-item
-preuve|wikibase-item
-sous propriété de|wikibase-property
-identifiant wikidata|external-id
-code uai|external-id
-source|string
-identifiant legifrance|external-id
-identifiant rnsr|external-id
-identifiant hal|external-id
-identifiant idref|external-id
-identifiant paysage|external-id
-sigle|string
-identifiant scanr|external-id
-uri|url
-nom|string
-a pour successeur|wikibase-item
+a pour délégataire|wikibase-item
+a pour partenaire|wikibase-item
 a pour prédécesseur|wikibase-item
-est membre de|wikibase-item
-a pour établissement associé|wikibase-item
-est établissement associé de|wikibase-item
-a pour établissement coaccrédité|wikibase-item
-accréditation doctorale|wikibase-item
-a pour établissement support|wikibase-item
-est établissement coaccrédité de|wikibase-item
-est établissement support de|wikibase-item
-est signataire de|wikibase-item
-est bénéficiaire de|wikibase-item
-en tant que mandataire de|wikibase-item
+a pour signataire|wikibase-item
+a pour successeur|wikibase-item
+abroge|wikibase-item
+code uai|string
+code établissement|string
+création|edtf
+début application|edtf
+début|edtf
 en tant que mandant de|wikibase-item
-type appartenance|string
-test|string
-forme juridique|string
-durée|quantity
-identifiant eter|string
-identifiant pic|string
-identifiant ror|string
-identifiant grid|string
-identifiant ed|string
+en tant que mandataire|wikibase-item
+est bénéficiaire de|wikibase-item
+est délégataire de|wikibase-item
+est membre de|wikibase-item
+est signataire de|wikibase-item
+fin application|edtf
+fin|edtf
+forme juridique|wikibase-item
+habilitation doctorale|wikibase-item
 identifiant cnrs|string
+identifiant contrat|string
 identifiant cti|string
-identifiant pia|string
-identifiant rcr|string
-identifiant isil|string
-identifiant orgref|string
-identifiant isni|string
+identifiant ed|string
+identifiant eter|string
 identifiant funding data|string
+identifiant grid|string
+identifiant hal|string
+identifiant idref|string
+identifiant isil|string
+identifiant isni|string
+identifiant légifrance|string
+identifiant orgref|string
+identifiant paysage|string
+identifiant pia|string
+identifiant pic|string
+identifiant rcr|string
+identifiant rnsr|string
+identifiant ror|string
+identifiant scanr|string
+identifiant siren|string
+identifiant siret|string
 identifiant viaf|string
+identifiant wikidata|string
+instance de|wikibase-item
+nom|string
+nor|string
+preuve|wikibase-item
+sigle|string
+source|wikibase-item
+sous classe de|wikibase-item
+suppression|edtf
+type|wikibase-item
+uri|url
