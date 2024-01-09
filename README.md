@@ -17,10 +17,8 @@ Les URLs correspondantes aux déploiements en local, test et prod de movies sont
   - http://lap-TRI.levant.abes.fr : homepage de movies
 - test :
   - https://movies-test.abes.fr : homepage de movies
-  - https://diplotaxis5-test.v202.abes.fr:80/ : URL interne de movies
 - prod
   - https://movies.abes.fr : homepage de movies
-  - http://diplotaxis5-prod.v102.abes.fr:80/ : URL interne de movies
 
 ## Prérequis
 
