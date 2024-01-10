@@ -16,8 +16,8 @@ echo "
       \"max_edits_per_minute\": 1,
       \"tag\": \"openrefine-\${version}\",
       \"properties\": {
-        \"instance_of\": \"P1\",
-        \"subclass_of\": \"P2\"
+        \"instance_of\": \"P47\",
+        \"subclass_of\": \"P53\"
       },
       \"constraints\": {
         \"property_constraint_pid\": \"P2302\",
