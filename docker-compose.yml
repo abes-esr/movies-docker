@@ -275,7 +275,7 @@ services:
     cpus: ${MOVIES_CPU_LIMIT}
 
   movies-db-dumper:
-    image: tiredofit/db-backup:3.9.11
+    image: tiredofit/db-backup:4.0.35
     container_name: movies-db-dumper
     restart: unless-stopped
     volumes:
@@ -400,6 +400,10 @@ services:
       WATCHTOWER_NO_STARTUP_MESSAGE: "true"
       WATCHTOWER_WARN_ON_HEAD_FAILURE: "never"
       WATCHTOWER_RUN_ONCE: ${MOVIES_WATCHTOWER_RUN_ONCE}
+      WATCHTOWER_NOTIFICATIONS: "slack"
+      WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL: ${MOVIES_WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL}
+      WATCHTOWER_NOTIFICATION_SLACK_IDENTIFIER: ${MOVIES_WATCHTOWER_NOTIFICATION_SLACK_IDENTIFIER}
+      WATCHTOWER_NOTIFICATION_SLACK_CHANNEL: "#notif-movies"
       WATCHTOWER_SCOPE: "movies-watchtower-scope"
     labels:
       - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
