@@ -289,18 +289,18 @@ services:
       CONTAINER_ENABLE_MONITORING: "FALSE"
       DB01_BACKUP_BEGIN: "2359"
       DB01_BACKUP_INTERVAL: "1440"
-      DB01_CHECKSUM: SHA1
+      DB01_CHECKSUM: "SHA1"
       DB01_CLEANUP_TIME: "10080"
-      DB01_COMPRESSION: GZ
+      DB01_COMPRESSION: "GZ"
       DB01_FILESYSTEM_PATH: /backup/${MOVIES_DB_DUMP_WORKDIR}
       DB01_FILESYSTEM_PERMISSION: 644
-      DB01_HOST: movies-wikibase-mysql
-      DB01_NAME: my_wiki
-      DB01_PASS: db-pass
-      DB01_TYPE: mysql
-      DB01_USER: sqluser
+      DB01_TYPE: "mysql"
+      DB01_HOST: "movies-wikibase-mysql"
+      DB01_NAME: ${MOVIES_WIKIBASE_DB_NAME}
+      DB01_USER: ${MOVIES_WIKIBASE_DB_USER}
+      DB01_PASS: ${MOVIES_WIKIBASE_DB_PASS}
       DEBUG_MODE: "FALSE"
-      TIMEZONE: Europe/Paris
+      TIMEZONE: "Europe/Paris"
     networks:
       - default
     mem_limit: ${MOVIES_MEM_LIMIT}
