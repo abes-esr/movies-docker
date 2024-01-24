@@ -279,28 +279,28 @@ services:
     container_name: movies-db-dumper
     restart: unless-stopped
     volumes:
-        - ${MOVIES_DB_DUMP_RACINE}:/backup_racine/
-        - ${MOVIES_DB_DUMP_WORKDIR}:/backup/
+        - ${MOVIES_DB_DUMP_RACINE}:/backup/
     depends_on:
         - movies-wikibase-mysql
     environment:
       # DB_DUMP_BEGIN: "0130" <= tous les jours à 1h30 du matin GMT
       # DB_DUMP_FREQ: 1440 <= chaque jour
       # DB_CLEANUP_TIME: 10080 (1440*7) <= conserve uniquement les 7 derniers jours
-      TIMEZONE: "Europe/Paris"
       CONTAINER_ENABLE_MONITORING: "FALSE"
-      DB_TYPE: "mysql"
-      DB_HOST: "movies-wikibase-mysql"
-      DB_NAME: ${MOVIES_WIKIBASE_DB_NAME}
-      DB_USER: ${MOVIES_WIKIBASE_DB_USER}
-      DB_PASS: ${MOVIES_WIKIBASE_DB_PASS}
-      DB_DUMP_BEGIN: "2359"
-      DB_DUMP_FREQ: "1440"
-      DB_CLEANUP_TIME: "10080"
-      CHECKSUM: "SHA1"
-      COMPRESSION: "GZ"
-      SPLIT_DB: "FALSE"
+      DB01_BACKUP_BEGIN: "2359"
+      DB01_BACKUP_INTERVAL: "1440"
+      DB01_CHECKSUM: SHA1
+      DB01_CLEANUP_TIME: "10080"
+      DB01_COMPRESSION: GZ
+      DB01_FILESYSTEM_PATH: /backup/${MOVIES_DB_DUMP_WORKDIR}
+      DB01_FILESYSTEM_PERMISSION: 644
+      DB01_HOST: movies-wikibase-mysql
+      DB01_NAME: my_wiki
+      DB01_PASS: db-pass
+      DB01_TYPE: mysql
+      DB01_USER: sqluser
       DEBUG_MODE: "FALSE"
+      TIMEZONE: Europe/Paris
     networks:
       - default
     mem_limit: ${MOVIES_MEM_LIMIT}
