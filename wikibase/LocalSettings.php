@@ -23,7 +23,7 @@ wfLoadExtension( 'LDAPGroups' );
 
 // Disable anonymous editing
 $wgGroupPermissions['*']['edit'] = false;
-$wgGroupPermissions['user']['edit'] = false;
+$wgGroupPermissions['user']['edit'] = true;
 $wgGroupPermissions['sysop']['edit'] = true;
 
 $wgGroupPermissions['bot']['edit'] = true;
@@ -68,7 +68,7 @@ $LDAPProviderDomainConfigProvider = function() {
 			],
 			'groupsync' => [
 				'mapping' => [
-					'sysop' => 'CN=Utilisateur_GED,OU=GED_EXAGED,OU=Groupes de securite,DC=levant,DC=abes,DC=fr'
+					'user' => 'CN=Utilisateur_GED,OU=GED_EXAGED,OU=Groupes de securite,DC=levant,DC=abes,DC=fr'
 				]
 			]
         ]
