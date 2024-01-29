@@ -24,6 +24,7 @@ wfLoadExtension( 'LDAPGroups' );
 // Disable anonymous editing
 $wgGroupPermissions['*']['edit'] = false;
 $wgGroupPermissions['user']['edit'] = true;
+$wgGroupPermissions['user']['delete'] = true;
 $wgGroupPermissions['sysop']['edit'] = true;
 
 $wgGroupPermissions['bot']['edit'] = true;
