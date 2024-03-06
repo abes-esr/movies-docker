@@ -21,7 +21,7 @@ wfLoadExtension( 'LDAPAuthorization' );
 wfLoadExtension( 'LDAPUserInfo' );
 wfLoadExtension( 'LDAPGroups' );
 
-//Voir les droits du Wiki : wiki/Special:ListGroupRights
+// Voir les droits du Wiki : wiki/Special:ListGroupRights
 
 // Disable anonymous editing
 $wgGroupPermissions['*']['edit'] = false;
@@ -37,7 +37,7 @@ $wgGroupPermissions['*']['autocreateaccount'] = true;
 
 // Pour que les users puissent ajouter des déclarations avec une propriété de type URL :
 $wgGroupPermissions['user']['skipcaptcha'] = true;
-//Autre possibilité : https://phabricator.wikimedia.org/T356398
+// Autre possibilité : https://phabricator.wikimedia.org/T356398
 
 // Authentification LDAP 
 $LDAPProviderDomainConfigProvider = function() {
