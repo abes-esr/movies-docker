@@ -37,6 +37,7 @@ $wgGroupPermissions['*']['autocreateaccount'] = true;
 
 // Pour que les users puissent ajouter des déclarations avec une propriété de type URL :
 $wgGroupPermissions['user']['skipcaptcha'] = true;
+//Autre possibilité : https://phabricator.wikimedia.org/T356398
 
 // Authentification LDAP 
 $LDAPProviderDomainConfigProvider = function() {
