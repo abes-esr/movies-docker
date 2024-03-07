@@ -39,6 +39,9 @@ $wgGroupPermissions['*']['autocreateaccount'] = true;
 $wgGroupPermissions['user']['skipcaptcha'] = true;
 // Autre possibilité : https://phabricator.wikimedia.org/T356398
 
+// Désactive l'authentification pour les utilisateurs bloqués (comme admin)
+$wgBlockDisablesLogin=true;
+
 // Authentification LDAP 
 $LDAPProviderDomainConfigProvider = function() {
     $config = [
