@@ -26,7 +26,7 @@ Disposer de :
 - ``docker``
 - ``docker-compose``
 
-## Installation
+## Installation 
 
 Déployer la configuration docker dans un répertoire :
 ```bash
