@@ -131,7 +131,7 @@ upstream upstream-movies-doc {
 # movies-test.abes.fr/grlc
 upstream upstream-movies-grlc {
     # Container: movies-grlc
-    server movies-grlc:8088;
+    server movies-grlc;
 }
 
 geo $dollar {
