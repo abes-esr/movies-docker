@@ -415,8 +415,6 @@ services:
     mem_limit: ${MOVIES_MEM_LIMIT}
     memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
     cpus: ${MOVIES_CPU_LIMIT}
-    # ports:
-    #   - "${MOVIES_GRLC_PORT}:8088"
     networks:
       - default
     environment:
