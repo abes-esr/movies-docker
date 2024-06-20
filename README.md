@@ -224,6 +224,20 @@ Le ``pull`` aura pour effet de télécharger l'éventuelle dernière images dock
 
 Ou bien [lancer le conteneur ``movies-watchtower``](https://github.com/abes-esr/movies-docker/blob/develop/README.md#d%C3%A9ploiement-continu) qui le fera automatiquement toutes les quelques secondes pour vous.
 
+### Mise à jour du fichier de configuration LocalSettings.php, sur une installation existante
+
+Pour modifier le fichier de configuration du Wikibase, en test ou prod : 
+```bash
+vi wikibase/LocalSettings.php
+docker compose up movies-wikibase movies-wikibase-jobrunner -d
+```
+
+Si le wikibase renvoie "Bad Gateway", relancer le reverse-proxy : 
+```bash
+docker stop movies-rp
+docker start movies-rp
+```
+
 ## Architecture
 
 <img alt="schéma d'architecture" src="https://docs.google.com/drawings/d/e/2PACX-1vRfKzc04c7Pfjw4UvCkyww0OpTr6Fski_QHVGCKa9rwYUyWxbJlhCgjf8lDTi5pZ7ds4fpQ72g4mavm/pub?w=1134&amp;h=554">

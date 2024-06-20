@@ -21,6 +21,14 @@ wfLoadExtension( 'LDAPAuthorization' );
 wfLoadExtension( 'LDAPUserInfo' );
 wfLoadExtension( 'LDAPGroups' );
 
+//Matomo/Piwik : uniquement en production (url = movies.abes.fr)
+if (getenv('WIKIBASE_URL_PUBLIQUE') == 'movies.abes.fr') {
+    wfLoadExtension( 'Matomo' );
+    $wgMatomoURL = "piwik.abes.fr";
+    $wgMatomoIDSite = "40";
+    $wgMatomoIgnoreSysops = false;
+}
+
 // Voir les droits du Wiki : wiki/Special:ListGroupRights
 
 // Disable anonymous editing
