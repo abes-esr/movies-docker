@@ -224,6 +224,9 @@ Le ``pull`` aura pour effet de télécharger l'éventuelle dernière images dock
 
 Ou bien [lancer le conteneur ``movies-watchtower``](https://github.com/abes-esr/movies-docker/blob/develop/README.md#d%C3%A9ploiement-continu) qui le fera automatiquement toutes les quelques secondes pour vous.
 
+/!\ Attention comme le conteneur wikibase utilise un volume pour ses fichiers (shared = /var/www/html), il n'est pas possible d'ajouter des extensions en modifiant son image (movies-wikibase) sur une installation existante et d'utiliser le système docker up / watchtower. 
+/!\ Dans ce cas, il faut exécuter les commandes ajoutées au Dockerfile de movies-wikibase dans le conteneur wikibase existant, pour ajouter des extensions.
+
 ### Mise à jour du fichier de configuration LocalSettings.php, sur une installation existante
 
 Pour modifier le fichier de configuration du Wikibase, en test ou prod : 
