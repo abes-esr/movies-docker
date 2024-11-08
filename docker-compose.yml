@@ -1,5 +1,4 @@
 # Example Wikibase docker-compose setup
-version: '3.4'
 
 x-common-variables: &wikibase_variables
   DB_SERVER: movies-wikibase-mysql.svc:3306
