@@ -178,38 +178,73 @@ Ces chemins sont à exclure des sauvegardes :
 
 ### Restauration depuis une sauvegarde
 
-Réinstallez l'application movies depuis la [procédure d'installation ci-dessus](#installation) et récupéré depuis les sauvegardes le fichier ``.env`` et placez le dans ``/opt/pod/movies-docker/.env`` sur la machine qui doit faire repartir movies.
+Réinstaller l'application movies depuis la [procédure d'installation ci-dessus](#installation) et récupérer depuis les sauvegardes le fichier ``.env`` et le placer dans ``/opt/pod/movies-docker/.env`` sur la machine qui doit faire repartir movies.
 
-Restaurez ensuite le dernier dump de la base de données postgresql de movies :
-- récupérer le dernier dump généré par ``movies-db-dumper`` depuis le système de sauvegarde (le fichier dump ressemble à ceci ``mysql_all_movies-wikibase-mysql_20230914-235900.sql.gz``) et placez le fichier dump récupéré (sans le décompresser) dans ``/opt/pod/movies-docker/movies_data/(test|prod)/`` sur la machine qui doit faire repartir movies  
-
-2 possiblités :  
-
-1)  
-
-- ensuite lancez uniquement les conteneurs ``movies-db`` et ``movies-db-dumper`` :
-   ```bash
-   docker-compose up -d movies-db movies-db-dumper
-   ```
-- lancez le script de restauration ``restore`` comme ceci et suivez les instructions :
-   ```bash
-   docker exec -it movies-db-dumper restore
-   ```
-- C'est bon, la base de données movies est alors restaurée
-
-2)  
-
-Lancer la commande : 
-```bash
-cd /opt/pod/movies-docker/
-zcat /docker-backup/movies/mysql_all_movies-wikibase-mysql_XXXX-XXXX.sql.gz | sudo docker exec -u mysql -i movies-wikibase-mysql mysql --user sqluser --password=XXXX
+Restaurer ensuite le dernier dump de la base de données MariaDB de movies :  
+Pour cela, se connecter au conteneur ``movies-db-dumper``et copier le fichier de dump voulu : les dumps se trouvent dans /backup/(test|prod)/  
+Par exemple, récupération d'un fichier dump de la prod, mis à disposition pour l'environnement de test :  
+```
+sudo docker exec -it movies-db-dumper sh
+cp /backup/prod/mysql_my_wiki_movies-wikibase-mysql_20250725-005904.sql.gz /backup/test/
 ```
 
-Lancez alors toute l'application movies et vérifiez qu'elle fonctionne bien :
-```bash
-cd /opt/pod/movies-docker/
-docker-compose up -d 
+Ensuite, lancer la restauration avec movies-db-dumper : 
 ```
+sudo docker exec -it movies-db-dumper restore
+
+Répondre aux questions comme ceci : 
+
+What Database Type are you looking to restore?
+    F ) Parsed Filename Type: 'mysql'
+
+What Hostname do you wish to restore to:
+    E ) Environment Variable DB01_HOST: 'movies-wikibase-mysql'
+
+What Database Name do you want to restore to?
+    C ) Custom Entered Database Name 
+    my_wiki
+    
+What database user will be used for restore:
+    E ) Environment Variable DB01_USER: 'sqluser'
+
+What Database Password will be used to restore?
+    E ) Environment Variable DB01_PASS
+
+What Database Port do you wish to use? MySQL/MariaDB typcially listens on port 3306. Postrgresql port 5432. MongoDB 27017
+    D ) Default Port for Database type 'mysql': '3306'
+```
+
+La base de données MariaDB du Wikibase est alors bien chargée.
+
+Par contre, il faut aussi recharger le WDQS (triple store du Wikibase) :  
+Depuis l'url https://movies(-test).abes.fr/sparql, on peut utiliser les requêtes SPARQL suivantes :
+```
+Afficher les données relatives à un item en particulier :
+
+#Attention à modifier l'url exemple (-test) selon l'environnement :
+SELECT * WHERE {
+  ?item ?p ?o .
+  FILTER(?item = <https://movies(-test).abes.fr/entity/Q4379>)
+}
+
+Tester que le triple store contient bien des données : 
+SELECT * WHERE {
+  ?s ?p ?o.
+}
+LIMIT 10
+```
+
+Il faut supprimer le fichier des données du WDQS pour le réinitialiser, puis rejouer l'indexation : 
+```
+sudo docker exec  movies-wikibase-wdqs sh -c 'rm -f data/data.jnl'
+sudo docker restart movies-wikibase-wdqs
+
+Remplacer partout, dans la commande ci-dessous, https://movies-test.abes.fr par https://movies.abes.fr si on recharge la base de production :
+sudo docker exec  movies-wikibase-wdqs bash -c '/wdqs/runUpdate.sh -h http://movies-wikibase-wdqs.svc:9999 -- --wikibaseUrl https://movies-test.abes.fr --conceptUri https://movies-test.abes.fr --entityNamespaces 120,122 -s 20200501000000' | tee logfile | awk '1;/Got no real changes/{exit}'
+```
+
+Le triple store est bien synchronisé avec les données de MariaDB.
+
 
 ## Développements
 
