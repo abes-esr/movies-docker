@@ -42,7 +42,7 @@ cp .env-dist .env
 # personnaliser alors le contenu du .env : indiquer les mots de passe et : le prefix de l'url (MOVIES_WIKIBASE_SCHEME), l'url publique (MOVIES_WIKIBASE_URL_PUBLIQUE), et le port du reverse proxy (MOVIES_RP_PORT).
 ```
 
-**Note : les mots de passe ne sont pas présent dans le fichier au moment de la copie. Vous devez aller les renseigner manuellement en éditant le fichier dans la console avec nano par exemple**
+**Note : les mots de passe ne sont pas présents dans le fichier au moment de la copie. Vous devez aller les renseigner manuellement en éditant le fichier dans la console avec nano par exemple**
 
 Avant de démarrer l'application, assurez-vous que les fichiers suivants aient les bonnes permissions :
   wikibase/LocalSettings.php  
@@ -59,12 +59,22 @@ chmod 644 wikibase/LocalSettings.php
 Démarrer l'application :
 ```bash
 cd /opt/pod/movies-docker/
-
-docker-compose up -d
-
-# en test, utiliser le profile test qui permet de synchroniser une fois par mois les données de prod vers le test : 
-docker compose --profile test up -d
+sudo docker compose up -d
 ```
+
+Particularités du projet :
+
+En environnement de test, utiliser le profile test qui permet de synchroniser une fois par mois les données de prod vers le test : 
+```
+cd /opt/pod/movies-docker/
+sudo docker compose --profile test up -d
+```
+
+A noter : le volume movies-data est un montage NFS entre la machine de test et celle de production.  
+Il permet une synchronisation, par le conteneur ``movies-copy-backup``, des données de production vers l'environnement de test, à interval régulier.
+
+L'image d'un des conteneurs est sur un dépôt autre que GitHub :
+https://gitlab.com/nfdi4culture/openrefine-reconciliation-services/openrefine-wikibase/-/tags  
 
 ## Démarrage et arrêt
 
@@ -169,14 +179,15 @@ Les éléments suivants sont à sauvegarder:
 - ``/opt/pod/movies-docker/.env`` : contient la configuration spécifique de notre déploiement
 - ``/opt/pod/movies-docker/movies_data`` : contient les dumps quotidiens de la base de données maria-db de movies
 
-/!\ A noter : le répertoire ``/opt/pod/movies-docker/movies_data`` est un montage NFS entre la machine de test et celle de production.  
-Il permet une synchronisation, par le conteneur ``movies-copy-backup``, des données de production vers l'environnement de test, à interval régulier.
-
-
 Ces chemins sont à exclure des sauvegardes :
   - ``/opt/pod/movies-docker/volumes/`` : car il contient les données binaires du mysql et du triple store, du wikibase de MOVIES
 
 ### Restauration depuis une sauvegarde
+
+TODO : 
+Ajouter la partie récupération du .env sur Sotora
+En test, il faut conserver le répertoire movies_data (répertoire movies_data) 
+
 
 Réinstaller l'application movies depuis la [procédure d'installation ci-dessus](#installation) et récupérer depuis les sauvegardes le fichier ``.env`` et le placer dans ``/opt/pod/movies-docker/.env`` sur la machine qui doit faire repartir movies.
 
@@ -215,6 +226,8 @@ What Database Port do you wish to use? MySQL/MariaDB typcially listens on port 3
 ```
 
 La base de données MariaDB du Wikibase est alors bien chargée.
+
+Aller sur le Wikibase, et faire une recherche sur Univ par exemple. Une fiche sur Paris Saclay va apparaître.  
 
 Par contre, il faut aussi recharger le WDQS (triple store du Wikibase) :  
 Depuis l'url https://movies(-test).abes.fr/sparql, on peut utiliser les requêtes SPARQL suivantes :
