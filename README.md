@@ -1,11 +1,12 @@
 # movies-docker
 
 ```mermaid
-sequenceDiagram
-    participant Utilisateur
-    participant Serveur
-    Utilisateur->>Serveur: Requête HTTP
-    Serveur-->>Utilisateur: Réponse JSON
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/abesesr/movies.svg)](https://hub.docker.com/r/abesesr/movies/)
 
