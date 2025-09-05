@@ -1,14 +1,11 @@
 # movies-docker
 
-```markdown
-```plantuml
-@startuml
-actor Utilisateur
-participant Serveur
-
-Utilisateur -> Serveur : Requête HTTP
-Serveur --> Utilisateur : Réponse JSON
-@enduml
+```mermaid
+sequenceDiagram
+    participant Utilisateur
+    participant Serveur
+    Utilisateur->>Serveur: Requête HTTP
+    Serveur-->>Utilisateur: Réponse JSON
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/abesesr/movies.svg)](https://hub.docker.com/r/abesesr/movies/)
 
