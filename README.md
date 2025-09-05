@@ -1,5 +1,15 @@
 # movies-docker
 
+```markdown
+```plantuml
+@startuml
+actor Utilisateur
+participant Serveur
+
+Utilisateur -> Serveur : Requête HTTP
+Serveur --> Utilisateur : Réponse JSON
+@enduml
+
 [![Docker Pulls](https://img.shields.io/docker/pulls/abesesr/movies.svg)](https://hub.docker.com/r/abesesr/movies/)
 
 Movies-docker est un outil en charge de constituer une base de connaissance historique et centralisée sur les établissements de l'ESR et leurs activités en lien avec le doctorat et la documentation électronique. __Cet outil est destiné à un usage interne de l'Abes.__
