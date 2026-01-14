@@ -382,7 +382,7 @@ services:
       - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
 
   movies-watchtower:
-    image: containrrr/watchtower:1.4.0
+    image: nickfedor/watchtower:1.13.1
     container_name: movies-watchtower
     restart: unless-stopped
     networks:
