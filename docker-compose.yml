@@ -90,8 +90,9 @@ services:
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-wikibase"
-      # pour que les mises à jour de cette image soient auto-déployées par watchtower
-      - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
+      # pour que les mises à jour de cette image soient auto-déployées par WUD
+      - "wud.watch=true"
+      - "wud.watch.digest=true"
 
   movies-wikibase-jobrunner:
     image: abesesr/movies:develop-wikibase
@@ -124,8 +125,9 @@ services:
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-wikibase-jobrunner"
-      # pour que les mises à jour de cette image soient auto-déployées par watchtower
-      - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
+      # pour que les mises à jour de cette image soient auto-déployées par WUD
+      - "wud.watch=true"
+      - "wud.watch.digest=true"
 
   movies-wikibase-mysql:
     image: "mariadb:${MOVIES_WIKIBASE_MYSQL_IMAGE_VERSION}"
@@ -378,34 +380,9 @@ services:
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-docusaurus"
-      # pour que les mises à jour de cette image soient auto-déployées par watchtower
-      - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
-
-  movies-watchtower:
-    image: nickfedor/watchtower:1.13.1
-    container_name: movies-watchtower
-    restart: unless-stopped
-    networks:
-      - default
-    mem_limit: ${MOVIES_MEM_LIMIT}
-    memswap_limit: ${MOVIES_MEMSWAP_LIMIT}
-    cpus: ${MOVIES_CPU_LIMIT}
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      WATCHTOWER_CLEANUP: "true"
-      WATCHTOWER_POLL_INTERVAL: 60
-      WATCHTOWER_DEBUG: "false"
-      WATCHTOWER_NO_STARTUP_MESSAGE: "true"
-      WATCHTOWER_WARN_ON_HEAD_FAILURE: "never"
-      WATCHTOWER_RUN_ONCE: ${MOVIES_WATCHTOWER_RUN_ONCE}
-      WATCHTOWER_NOTIFICATIONS: "slack"
-      WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL: ${MOVIES_WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL}
-      WATCHTOWER_NOTIFICATION_SLACK_IDENTIFIER: ${MOVIES_WATCHTOWER_NOTIFICATION_SLACK_IDENTIFIER}
-      WATCHTOWER_NOTIFICATION_SLACK_CHANNEL: "#notif-movies"
-      WATCHTOWER_SCOPE: "movies-watchtower-scope"
-    labels:
-      - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
+      # pour que les mises à jour de cette image soient auto-déployées par WUD
+      - "wud.watch=true"
+      - "wud.watch.digest=true"
 
   movies-grlc:
     image: clariah/grlc:v1.3.8
@@ -445,8 +422,9 @@ services:
       - "co.elastic.logs/processors.add_fields.target="
       - "co.elastic.logs/processors.add_fields.fields.abes_appli=movies"
       - "co.elastic.logs/processors.add_fields.fields.abes_middleware=movies-copy-backup"
-      # pour que les mises à jour de cette image soient auto-déployées par watchtower
-      - "com.centurylinklabs.watchtower.scope=movies-watchtower-scope"
+      # pour que les mises à jour de cette image soient auto-déployées par WUD
+      - "wud.watch=true"
+      - "wud.watch.digest=true"
 
 volumes:
   shared:
